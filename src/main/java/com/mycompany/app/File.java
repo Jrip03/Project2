@@ -13,7 +13,7 @@ public class File {
 
     }
 
-    public void retrieveFile(Course course){
+    public void retrieveFile(){
 
     }
 
