@@ -29,7 +29,7 @@ public class Course{
         return classSize;
     }
 
-    public Student[] getStudentList(){
+    public ArrayList<Student> getStudentList(){
         return roster;
     }
 
@@ -38,7 +38,7 @@ public class Course{
     }
 
     public void addStudent(Student student){
-        roster.append(student);
+        roster.add(student);
     }
 
     public void removeStudent(String studentName){
