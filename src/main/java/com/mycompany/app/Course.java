@@ -1,3 +1,5 @@
+package com.mycompany.app;
+
 public class Course{
     private final String courseName;
     private final String courseID;
