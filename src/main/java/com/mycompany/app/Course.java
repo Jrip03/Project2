@@ -1,5 +1,7 @@
 package com.mycompany.app;
 
+import java.util.ArrayList;
+
 public class Course{
     private final String courseName;
     private final String courseID;
@@ -11,7 +13,7 @@ public class Course{
         courseName = name;
         courseID = id;
         roster = studentList;
-        classSize = roster.length();
+        classSize = roster.size();
         this.teacher = teacher;
     }
 
