@@ -1,5 +1,7 @@
 package com.mycompany.app;
 
+import java.util.ArrayList;
+
 public class Course{
     private final String courseName;
     private final String courseID;
@@ -11,7 +13,7 @@ public class Course{
         courseName = name;
         courseID = id;
         roster = studentList;
-        classSize = roster.length();
+        classSize = roster.size();
         this.teacher = teacher;
     }
 
@@ -27,7 +29,7 @@ public class Course{
         return classSize;
     }
 
-    public Student[] getStudentList(){
+    public ArrayList<Student> getStudentList(){
         return roster;
     }
 
@@ -36,10 +38,16 @@ public class Course{
     }
 
     public void addStudent(Student student){
-        roster.append(student);
+        roster.add(student);
+        classSize++;
     }
 
     public void removeStudent(String studentName){
         
+        classSize--;
     }
+
+    //add assignment
+    //grade assignment (goes in gradebook class)
+    //
 }
