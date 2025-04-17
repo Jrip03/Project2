@@ -8,6 +8,7 @@ public class Course{
     private int classSize;
     private ArrayList<Student> roster;
     private final Teacher teacher;
+    private GradeBook gradeBook;
 
     public Course(String name, String id, ArrayList<Student> studentList, Teacher teacher){
         courseName = name;
@@ -15,6 +16,7 @@ public class Course{
         roster = studentList;
         classSize = roster.size();
         this.teacher = teacher;
+
     }
 
     public String getCourseName(){
@@ -48,6 +50,15 @@ public class Course{
     }
 
     //add assignment
-    //grade assignment (goes in gradebook class)
-    //
+
+
+    public String toString(){
+        String str = courseID + ": " +  courseName;
+        str = str + "\nTeacher: " + teacher.getFirstName() + " " + teacher.getLastName();
+        for(int i = 0; i< classSize; i++){
+            str = str + "\n" + roster.get(i).getFirstName() + " " + roster.get(i).getLastName() + ": ";
+            //str = str + gradeBook;
+        } 
+        return str;
+    }
 }
