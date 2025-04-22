@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class App {
     private static Scanner in = new Scanner(System.in);
     private static File fileManager = new File();
+    // CWE-766
     private static ArrayList<Course> courseList = new ArrayList<Course>();
 
     public static void main(String[] args) {
@@ -55,7 +56,7 @@ public class App {
                     addStudent();
                     break;
                 case 7:
-                deleteStudent();
+                    deleteStudent();
                     break;
                 case 0:
                     succesfullExit = ExitProgram();
@@ -202,6 +203,7 @@ public class App {
                     return;
                 }
 
+                // CWE-357
                 System.out.print("Are you sure you want to delete the student? This can't be undone (y/N)");
                 if (in.nextLine().toUpperCase().equals("Y")) {
                     courseToEdit.removeStudent(idToDel);
@@ -241,6 +243,7 @@ public class App {
         for (int i = 0; i < courseList.size(); i++) {
             Course curCourse = courseList.get(i);
             // CWE-476
+            // CWE-395????
             if (curCourse == null) {
                 continue;
             }
