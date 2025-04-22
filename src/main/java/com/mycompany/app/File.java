@@ -14,14 +14,52 @@ public class File {
      * CWE-248: Uncaught Exception
      * @param filename
      */
-    public void readFile(String filename) throws FileNotFoundException, IOException, Exception {
+    public Course readFile(String filename) throws FileNotFoundException, IOException {
         //try with resources. Closes the file automatically
         //Read file line by line
+        ArrayList<Student> studentList = new ArrayList<Student>();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
+            String courseName="";
+            String courseID="";
+            Teacher teacher = null;
+
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
+                //Course
+                //number of students
+                int numOfStudents = Integer.parseInt(line);
+                int numOfAssignments = Integer.parseInt(line);
+                String arr[] = line.split(" ");
+                 courseName = arr[0];
+                 courseID = arr[1];
+                String teacherFirstName = arr[2];
+                String teacherLastName = arr[3];
+                //Create a new teacher object
+                 teacher = new Teacher(teacherFirstName, teacherLastName);
+                //Student
+                String arr2[] = line.split(" ");
+                for(int i=0; i <numOfStudents; i++){
+                    String studentID = arr2[0];
+                    String firstName = arr2[1];
+                    String lastName = arr2[2];
+                    //Create a new student object
+                    Student student = new Student(firstName, lastName, studentID);
+                    //Add the student to the course
+                    for(int j =0; j < numOfAssignments; j++){
+                       //add assignment grades to gradebook
+                    }
+                    
+                    studentList.add(student);
+                }
+                
+                
+                //Student first name and last name student ID, grade
+                //continued
             }
+                Course course = new Course(courseName, courseID, studentList, teacher);
+
+                return course;
+
             //Catch any exceptions that occur with an error message
         } catch (FileNotFoundException e) {
             System.err.println("File not found: " + filename);
@@ -31,11 +69,7 @@ public class File {
             System.err.println("Error reading file: " + filename);
             System.err.println("" + e.getMessage()); 
             throw new IOException(e.getMessage());
-        } catch (Exception e) {
-            System.err.println("An error occurred.");
-            System.err.println("" + e.getMessage());
-            throw new Exception(e.getMessage());
-       }
+        } 
 
     }
     /**
@@ -47,7 +81,7 @@ public class File {
      * @throws IOException
      * @throws Exception
      */
-    public void writeFile(Course course)throws IOException, Exception {
+    public void writeFile(Course course)throws IOException {
         if(course == null){
             throw new NullPointerException("Course is null");
         }
@@ -61,48 +95,9 @@ public class File {
             System.err.println("Error writing file: " + course.getCourseName() + ".txt");
             System.err.println("" + e.getMessage());
             throw new IOException(e.getMessage());
-        } catch (Exception e) {
-            System.err.println("An error occurred:");
-            System.err.println("" + e.getMessage());
-            throw new Exception(e.getMessage());
-        }
+        } 
         //Add to fileList
         fileList.add(filename);
     }
 
-    /**
-     * Retrieve a file based on the course name
-     * @param course
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws Exception
-     */
-    public void retrieveFile(Course course) throws FileNotFoundException, IOException, Exception {
-        //Search for file in the list, If not found, throw an exception
-        String filename = searchFileName(course);
-        //If the file is found, read it
-        readFile(filename);
-
-    }
-    /**
-     * Search for the file name based on the course name
-     * CWE-252: Unchecked Return Value
-     * @param course
-     * @return
-     * @throws FileNotFoundException
-     */
-   public String searchFileName(Course course)throws FileNotFoundException {
-    //Search for the file name based on the course name
-    if(course == null){
-        throw new NullPointerException("Course is null");
-    }
-    String courseName = course.getCourseName();
-    for (String file : fileList) {
-        if (file.equals(courseName + ".txt")) {
-            return file;
-        }
-    }
-    //Throw an exception if the file is not found
-    throw new FileNotFoundException("File was not found. ");
-   }
-}
+}  
