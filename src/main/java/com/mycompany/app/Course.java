@@ -44,7 +44,7 @@ public class Course{
         classSize++;
     }
 
-    public void removeStudent(String studentName){
+    public void removeStudent(String studentID){
         
         classSize--;
     }
