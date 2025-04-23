@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 public class File {
     
-    List<String> fileList = new ArrayList<String>();
-
     /**
      * Read a file
      * CWE-459: Incomplete Cleanup
@@ -38,6 +36,7 @@ public class File {
                  teacher = new Teacher(teacherFirstName, teacherLastName);
                 //Student
                 String arr2[] = line.split(" ");
+                Course course = new Course(courseName, courseID, studentList, teacher);
                 for(int i=0; i <numOfStudents; i++){
                     String studentID = arr2[0];
                     String firstName = arr2[1];
@@ -45,21 +44,16 @@ public class File {
                     //Create a new student object
                     Student student = new Student(firstName, lastName, studentID);
                     //Add the student to the course
-                    for(int j =0; j < numOfAssignments; j++){
+                    for(int j =3; j < numOfAssignments+3; j++){
                        //add assignment grades to gradebook
+                       course.addGrade(student, Integer.parseInt(arr2[j]));
                     }
                     
-                    studentList.add(student);
+                    course.addStudent(student);
+
                 }
-                
-                
-                //Student first name and last name student ID, grade
-                //continued
-            }
-                Course course = new Course(courseName, courseID, studentList, teacher);
-
                 return course;
-
+            }
             //Catch any exceptions that occur with an error message
         } catch (FileNotFoundException e) {
             System.err.println("File not found: " + filename);
@@ -70,6 +64,7 @@ public class File {
             System.err.println("" + e.getMessage()); 
             throw new IOException(e.getMessage());
         } 
+        return null;
 
     }
     /**
@@ -96,8 +91,6 @@ public class File {
             System.err.println("" + e.getMessage());
             throw new IOException(e.getMessage());
         } 
-        //Add to fileList
-        fileList.add(filename);
     }
 
 }  
