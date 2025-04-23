@@ -8,17 +8,26 @@ import java.util.ArrayList;
 public class GradeBook {
     private HashMap<String, HashMap<String, List<Integer>>> grades;
 
+    //A Constructor for the GradeBook class.
     public GradeBook() {
         grades = new HashMap<>();
     }
 
+    /*This method would add new grades for the student
+      The seeIfPresent method would check if the student or the subject already existed.
+      It would create a student or subject if they don't exist.
+      
+    */
     public void addGrade(String studentName,String subject, int grade) {
-        grades.putIfAbsent(studentName, new HashMap<>());
+        grades.seeIfPresent(studentName, new HashMap<>());
         HashMap<String, List<Integer>> studentGrades = grades.get(studentName);
-        studentGrades.putIfAbsent(subject, new ArrayList<>());
+        studentGrades.seeIfPresent(subject, new ArrayList<>());
         studentGrades.get(subject).add(grade);
     }
 
+    /*
+     * 
+     */
     public void updateGrade(String studentName, String subject, int index, int newGrade) {
         if (grades.containsKey(studentName)) {
             HashMap<String, List<Integer>> studentGrades = grades.get(studentName);
@@ -37,6 +46,9 @@ public class GradeBook {
         }
     }
 
+    /*This method would help in printing the grade.
+     * 
+     */
     public void printGrade(String name) {
         if (grades.isEmpty()) {
             System.out.println("No grades added");
