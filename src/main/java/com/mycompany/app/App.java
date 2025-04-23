@@ -93,6 +93,10 @@ public class App {
         String cID = in.nextLine();
 
         Course newC = new Course(cName, cID, new ArrayList<Student>(), newT);
+
+        courseList.add(newC);
+
+        System.out.println("Succesfully added new course.");
     }
 
     private static void importCourse() {
