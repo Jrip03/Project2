@@ -28,13 +28,14 @@ public class App {
 
         while (!succesfullExit) {
             System.out.println("1. Import another couser.");
-            System.out.println("2. Edit course.");
-            System.out.println("3. Input new assignment.");
-            System.out.println("4. Update student grade.");
-            System.out.println("5. Get student grade.");
-            System.out.println("6. Add student.");
-            System.out.println("7. Delete studnet.");
-            System.out.println("8. Save to file.");
+            System.out.println("2. Create a new course.");
+            System.out.println("3. Edit course.");
+            System.out.println("4. Input new assignment.");
+            System.out.println("5. Update student grade.");
+            System.out.println("6. Get student grade.");
+            System.out.println("7. Add student.");
+            System.out.println("8. Delete studnet.");
+            System.out.println("9. Save to file.");
             System.out.println("0. Exit.");
             System.out.print("Enter your selection: ");
 
@@ -46,21 +47,24 @@ public class App {
                     importCourse();
                     break;
                 case 2:
-                    editCourse();
+                    createNewCourse();
                     break;
                 case 3:
+                    editCourse();
                     break;
                 case 4:
                     break;
                 case 5:
                     break;
                 case 6:
-                    addStudent();
                     break;
                 case 7:
-                    deleteStudent();
+                    addStudent();
                     break;
                 case 8:
+                    deleteStudent();
+                    break;
+                case 9:
                     saveFile();
                     break;
                 case 0:
@@ -73,6 +77,22 @@ public class App {
         }
 
         in.close();
+    }
+
+    private static void createNewCourse(){
+        System.out.print("Enter profesor first name: ");
+        String fName = in.nextLine();
+        System.out.print("Enter profesor last name: ");
+        String lName = in.nextLine();
+
+        Teacher newT = new Teacher(fName, lName);
+
+        System.out.print("Enter course name: ");
+        String cName = in.nextLine();
+        System.out.print("Enter course ID: ");
+        String cID = in.nextLine();
+
+        Course newC = new Course(cName, cID, new ArrayList<Student>(), newT);
     }
 
     private static void importCourse() {
