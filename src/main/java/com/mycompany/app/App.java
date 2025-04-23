@@ -6,6 +6,7 @@
 package com.mycompany.app;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,7 +16,7 @@ public class App {
     // CWE-766
     private static ArrayList<Course> courseList = new ArrayList<Course>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         System.out.print("Do you want to load a file from disk? (y/N) ");
         String inputString = in.nextLine();
@@ -27,12 +28,14 @@ public class App {
 
         while (!succesfullExit) {
             System.out.println("1. Import another couser.");
-            System.out.println("2. Edit course.");
-            System.out.println("3. Input new assignment.");
-            System.out.println("4. Update student grade.");
-            System.out.println("5. Get student grade.");
-            System.out.println("6. Add student.");
-            System.out.println("7. Delete studnet.");
+            System.out.println("2. Create a new course.");
+            System.out.println("3. Edit course.");
+            System.out.println("4. Input new assignment.");
+            System.out.println("5. Update student grade.");
+            System.out.println("6. Get student grade.");
+            System.out.println("7. Add student.");
+            System.out.println("8. Delete studnet.");
+            System.out.println("9. Save to file.");
             System.out.println("0. Exit.");
             System.out.print("Enter your selection: ");
 
@@ -44,19 +47,25 @@ public class App {
                     importCourse();
                     break;
                 case 2:
-                    editCourse();
+                    createNewCourse();
                     break;
                 case 3:
+                    editCourse();
                     break;
                 case 4:
                     break;
                 case 5:
                     break;
                 case 6:
-                    addStudent();
                     break;
                 case 7:
+                    addStudent();
+                    break;
+                case 8:
                     deleteStudent();
+                    break;
+                case 9:
+                    saveFile();
                     break;
                 case 0:
                     succesfullExit = ExitProgram();
@@ -68,6 +77,26 @@ public class App {
         }
 
         in.close();
+    }
+
+    private static void createNewCourse(){
+        System.out.print("Enter profesor first name: ");
+        String fName = in.nextLine();
+        System.out.print("Enter profesor last name: ");
+        String lName = in.nextLine();
+
+        Teacher newT = new Teacher(fName, lName);
+
+        System.out.print("Enter course name: ");
+        String cName = in.nextLine();
+        System.out.print("Enter course ID: ");
+        String cID = in.nextLine();
+
+        Course newC = new Course(cName, cID, new ArrayList<Student>(), newT);
+
+        courseList.add(newC);
+
+        System.out.println("Succesfully added new course.");
     }
 
     private static void importCourse() {
@@ -133,6 +162,37 @@ public class App {
             }
         }
 
+    }
+
+    private static void saveFile() throws IOException {
+        System.out.println("Select an option:");
+        System.out.println("1. Print courses.");
+        System.out.println("2. Save file");
+        System.out.println("0. Go to previous menu.");
+        int menuSelection = in.nextInt();
+        in.nextLine();
+
+        switch (menuSelection) {
+            case 1:
+                PrintCourses();
+                break;
+            case 2:
+                System.out.print("Enter ID of course you want to save. ");
+                String courseId = in.nextLine();
+
+                Course courseToSave = findCourse(courseId);
+
+                if (courseToSave == null) {
+                    System.out.println("Course does not exist. Try again.");
+                    return;
+                }
+
+                fileManager.writeFile(courseToSave);
+                break;
+            default:
+                System.out.println("Invalid input, try again.");
+                break;
+        }
     }
 
     private static void addStudent() {
