@@ -2,8 +2,7 @@ package com.mycompany.app;
 
 //Import statements for HashMap and ArrayList.
 import java.util.HashMap;
-import java.util.ArrayList; 
-import java.util.List;
+import java.util.ArrayList;
 
 public class GradeBook {
     private HashMap<String, ArrayList<Integer>> studentGrades;
@@ -14,29 +13,41 @@ public class GradeBook {
     }
 
     //Adds a new student
-    public void addStudent(String ID) {
+    public boolean addStudent(String ID) {
         if (!studentGrades.containsKey(ID)) {
             studentGrades.put(ID, new ArrayList<Integer>());
+            return true;
         } else {
             System.out.println("Student already exists");
+            return false;
         }
     }
 
-    public void addGrade(String ID, Integer grade) {
-        if (!studentGrades.containsKey(ID)) {
-            System.out.println("Student not found");
+    public boolean removeStudent(String ID) {
+        if (studentGrades.containsKey(ID)) {
+            studentGrades.remove(ID);
+            return true;
         } else {
-            studentGrades.computeIfPresent(ID, (key, gradeList) -> 
-            {
-                gradeList.add(grade);
-                return gradeList;
-            }
-            ); 
+            System.out.println("Student does not exists in gradebook");
+            return false;
         }
+    }
+
+    public boolean addGrade(String ID, Integer grade) {
+        if (!studentGrades.containsKey(ID)) {
+            System.out.println("Student not found in gradebook");
+            return false;
+        }
+        studentGrades.computeIfPresent(ID, (key, gradeList) -> {
+            gradeList.add(grade);
+            return gradeList;
+        });
+        return true;
+
     }
 
     // Get a student's grades
-    public List<Integer> getGrades(String ID) {
+    public ArrayList<Integer> getGrades(String ID) {
         return studentGrades.get(ID);
     }
 
@@ -51,7 +62,7 @@ public class GradeBook {
                 System.out.println("Invalid index for grades list");
             }
         } else {
-            System.out.println("Student not found");
+            System.out.println("Student not found in gradebook");
         }
     }
 
@@ -61,7 +72,7 @@ public class GradeBook {
         if (studentGrades.isEmpty()) {
             System.out.println("The gradebook is empty.");
         } else if(!studentGrades.containsKey(ID)) {
-            System.out.println("Student not found");
+            System.out.println("Student not found in gradebook");
         }
         else {
             for(int i=0; i<studentGrades.get(ID).size(); i++) {

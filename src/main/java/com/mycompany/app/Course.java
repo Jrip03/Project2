@@ -1,6 +1,7 @@
 package com.mycompany.app;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Course{
@@ -17,7 +18,7 @@ public class Course{
         roster = studentList;
         classSize = roster.size();
         this.teacher = teacher;
-
+        gradeBook = new GradeBook();
     }
 
     public String getCourseName(){
@@ -41,35 +42,52 @@ public class Course{
     }
 
     public void addStudent(Student student){
-        roster.add(student);
-        classSize++;
-        //add student to gradebook
+        if (gradeBook.addStudent(student.getStudentID())) {
+            roster.add(student);
+            classSize++;
+        }
     }
 
-    public void removeStudent(String studentID){
-        //remove student from gradebook
-
-        //remove student from roster
-        classSize--;
+    public void removeStudent(Student student) {
+        if (gradeBook.removeStudent(student.getStudentID())) {
+            roster.remove(student);
+            classSize--;
+        }
     }
 
-    //add assignment
     public void gradeAssignment(){
         Scanner input = new Scanner(System.in);
+        int index = 0;
         System.out.println("Enter the grade for the following students: ");
-        for (int i = 0; i < classSize; i++){
-            System.out.print(roster.get(i).getFirstName() + " " + roster.get(i).getLastName() + ": ");
-            int grade = input.nextInt();
-            //add grade to gradebook
-
-            System.out.println();
+        while (index < classSize) {
+            System.out.print(roster.get(index).getFirstName() + " " + roster.get(index).getLastName() + ": ");
+            try {
+                int inputGrade = input.nextInt();
+                if (inputGrade < 0 || inputGrade > 100) {
+                    System.out.println("Not a valid input: grade value should be from 0-100\n");
+                } else {
+                    Integer grade = inputGrade;
+                    if (gradeBook.addGrade(roster.get(index).getStudentID(), grade)) {
+                        index++;
+                    }
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Not a valid input: grade value should be from 0-100\n");
+            }
         }
+        System.out.println();
         input.close();
     }
 
-    //add to gradebook for a specific student
-    public void addGrade(Student student, int grade){
-        //find student in gradebook and add grade
+    public void addSingleGrade(Student student, int grade) {
+        Integer newGrade = grade;
+        if (!gradeBook.addGrade(student.getStudentID(), newGrade)) {
+            System.out.println("Grade could not be added\n");
+        }
+    }
+
+    public ArrayList<Integer> getGrades(Student student) {
+        return gradeBook.getGrades(student.getStudentID());
     }
 
     @Override
@@ -78,7 +96,7 @@ public class Course{
         str = str + "\nTeacher: " + teacher.getFirstName() + " " + teacher.getLastName();
         for(int i = 0; i< classSize; i++){
             str = str + "\n" + roster.get(i).getFirstName() + " " + roster.get(i).getLastName() + ": ";
-            //str = str + gradeBook;
+            str = str + getGrades(roster.get(i));
         } 
         return str;
     }
