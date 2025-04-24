@@ -43,10 +43,13 @@ public class Course{
     public void addStudent(Student student){
         roster.add(student);
         classSize++;
+        //add student to gradebook
     }
 
     public void removeStudent(String studentID){
-        
+        //remove student from gradebook
+
+        //remove student from roster
         classSize--;
     }
 
