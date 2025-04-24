@@ -2,8 +2,7 @@ package com.mycompany.app;
 
 //Import statements for HashMap and ArrayList.
 import java.util.HashMap;
-import java.util.ArrayList; 
-import java.util.List;
+import java.util.ArrayList;
 
 public class GradeBook {
     //I have tried storing each students grades and ID's with HashMap.
@@ -14,36 +13,40 @@ public class GradeBook {
         studentGrades = new HashMap<>();
     }
 
-    /* Adds a new student
-     * By using ID
-     * If the student already exists it would print a statement
-    */
+    //Adds a new student
     public void addStudent(String ID) {
         if (!studentGrades.containsKey(ID)) {
             studentGrades.put(ID, new ArrayList<Integer>());
+            return true;
         } else {
             System.out.println("Student already exists");
+            return false;
         }
     }
 
-    /* A method to add a new grade to the student's grade list
-     * First I have checked if the student exists, if not it would print a statement
-     * Then uses computeIfPresent to add grade to the list
-     */
     public void addGrade(String ID, Integer grade) {
         if (!studentGrades.containsKey(ID)) {
             System.out.println("Student not found");
         } else {
-            studentGrades.computeIfPresent(ID, (key, gradeList) -> 
-            {
-                gradeList.add(grade);
-                return gradeList;
-            }
-            ); 
+            System.out.println("Student does not exists in gradebook");
+            return false;
         }
     }
 
-    // A method to get a student's grades with their ID.
+    public boolean addGrade(String ID, Integer grade) {
+        if (!studentGrades.containsKey(ID)) {
+            System.out.println("Student not found in gradebook");
+            return false;
+        }
+        studentGrades.computeIfPresent(ID, (key, gradeList) -> {
+            gradeList.add(grade);
+            return gradeList;
+        });
+        return true;
+
+    }
+
+    // Get a student's grades
     public List<Integer> getGrades(String ID) {
         return studentGrades.get(ID);
     }
@@ -62,7 +65,7 @@ public class GradeBook {
                 System.out.println("Invalid index for grades list");
             }
         } else {
-            System.out.println("Student not found");
+            System.out.println("Student not found in gradebook");
         }
     }
 
@@ -75,7 +78,7 @@ public class GradeBook {
     public void printGradebook(String ID) {
         if (studentGrades.isEmpty()) {
             System.out.println("The gradebook is empty.");
-        } else if (!studentGrades.containsKey(ID)) {
+        } else if(!studentGrades.containsKey(ID)) {
             System.out.println("Student not found");
         }
         else {

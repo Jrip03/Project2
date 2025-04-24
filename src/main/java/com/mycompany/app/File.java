@@ -1,6 +1,6 @@
 package com.mycompany.app;
+
 import java.io.*;
-import java.util.List;
 import java.util.ArrayList;
 
 public class File {
@@ -46,7 +46,7 @@ public class File {
                     //Add the student to the course
                     for(int j =3; j < numOfAssignments+3; j++){
                        //add assignment grades to gradebook
-                       course.addGrade(student, Integer.parseInt(arr2[j]));
+                       course.addSingleGrade(student, Integer.parseInt(arr2[j]));
                     }
                     
                     course.addStudent(student);

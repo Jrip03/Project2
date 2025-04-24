@@ -266,7 +266,7 @@ public class App {
                 // CWE-357
                 System.out.print("Are you sure you want to delete the student? This can't be undone (y/N)");
                 if (in.nextLine().toUpperCase().equals("Y")) {
-                    courseToEdit.removeStudent(idToDel);
+                    courseToEdit.removeStudent(courseToEdit.getStudent(idToDel));
                 }
                 break;
 
