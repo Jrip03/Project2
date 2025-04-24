@@ -12,6 +12,13 @@ public class Course{
     private final Teacher teacher;
     private GradeBook gradeBook;
 
+    /**
+     * 
+     * @param name        course name
+     * @param id          course id
+     * @param studentList initial list of students for the class
+     * @param teacher     teacher who teaches course
+     */
     public Course(String name, String id, ArrayList<Student> studentList, Teacher teacher){
         courseName = name;
         courseID = id;
@@ -21,14 +28,26 @@ public class Course{
         gradeBook = new GradeBook();
     }
 
+    /**
+     * 
+     * @return returns name of course
+     */
     public String getCourseName(){
         return courseName;
     }
 
+    /**
+     * 
+     * @return returns ID of course
+     */
     public String getCourseID(){
         return courseID;
     }
 
+    /**
+     * 
+     * @return size of the class
+     */
     public int getClassSize(){
         return classSize;
     }
@@ -37,24 +56,64 @@ public class Course{
         return roster;
     }
 
+    /**
+     * 
+     * @param ID id of a student object
+     * @return object of a student in the course
+     */
+    public Student getStudent(String ID) {
+        for (int i = 0; i < classSize; i++) {
+            if (roster.get(i).getStudentID() == ID) {
+                return roster.get(i);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 
+     * @return object of teacher for the course
+     */
     public Teacher getTeacher(){
         return teacher;
     }
 
+    /**
+     * attempts to add a student to the class and gradebook
+     * does not add student if it fails to add the student to gradebook
+     * 
+     * @param student object of a student
+     * 
+     */
     public void addStudent(Student student){
-        if (gradeBook.addStudent(student.getStudentID())) {
+        if (student == null) {
+            System.out.println("Could not remove student: Invalid ID");
+        } else if (gradeBook.addStudent(student.getStudentID())) {
             roster.add(student);
             classSize++;
         }
     }
 
+    /**
+     * attempts to remove a student from course and gradebook
+     * does not remove student if it fails to remove student from gradebook
+     * 
+     * @param student object of a student
+     * 
+     */
     public void removeStudent(Student student) {
-        if (gradeBook.removeStudent(student.getStudentID())) {
+        if (student == null) {
+            System.out.println("Could not remove student: Invalid ID");
+        } else if (gradeBook.removeStudent(student.getStudentID())) {
             roster.remove(student);
             classSize--;
         }
     }
 
+    /**
+     * grades an assignment for the entire class
+     * works through roster asking to input grade for each student
+     */
     public void gradeAssignment(){
         Scanner input = new Scanner(System.in);
         int index = 0;
@@ -79,6 +138,13 @@ public class Course{
         input.close();
     }
 
+    /**
+     * 
+     * @param student object of student
+     * @param grade   assignment grade to be added to gradebook
+     *                adds a grade for a single student
+     *                does nothing if grade cannot be added
+     */
     public void addSingleGrade(Student student, int grade) {
         Integer newGrade = grade;
         if (!gradeBook.addGrade(student.getStudentID(), newGrade)) {
@@ -86,15 +152,40 @@ public class Course{
         }
     }
 
+    /**
+     * edits the grade for a student in the course
+     * 
+     * @param student    object of student
+     * @param gradeIndex index of grade in gradebook
+     * @param grade      new grade to be changed to
+     */
+    public void editGrade(Student student, int gradeIndex, int grade) {
+        if (grade < 0 || grade > 100) {
+            System.out.println("Invalid grade: value should be between 0 and 100\n");
+        } else {
+            Integer newGrade = grade;
+            gradeBook.updateGrade(student.getStudentID(), gradeIndex, newGrade);
+        }
+    }
+
+    /**
+     * pulls the list of grades a student has in the gradebook
+     * 
+     * @param student object of student
+     * @return Integer list of grades
+     */
     public ArrayList<Integer> getGrades(Student student) {
         return gradeBook.getGrades(student.getStudentID());
     }
 
+    /**
+     * toSting for printing out a courses information
+     */
     @Override
     public String toString(){
         String str = courseID + ": " +  courseName;
         str = str + "\nTeacher: " + teacher.getFirstName() + " " + teacher.getLastName();
-        for(int i = 0; i< classSize; i++){
+        for (int i = 0; i < classSize; i++) {
             str = str + "\n" + roster.get(i).getFirstName() + " " + roster.get(i).getLastName() + ": ";
             str = str + getGrades(roster.get(i));
         } 
