@@ -13,7 +13,7 @@ public class GradeBook {
         studentGrades = new HashMap<>();
     }
 
-    // Adds a new student
+    //Adds a new student
     public void addStudent(String ID) {
         if (!studentGrades.containsKey(ID)) {
             studentGrades.put(ID, new ArrayList<Integer>());
@@ -24,7 +24,7 @@ public class GradeBook {
 
     public void addGrade(String ID, Integer grade) {
         if (!studentGrades.containsKey(ID)) {
-            System.out.println("Student is not fount");
+            System.out.println("Student not found");
         } else {
             studentGrades.computeIfPresent(ID, (key, gradeList) -> 
             {
@@ -56,11 +56,11 @@ public class GradeBook {
     }
 
     
-    // Print all students in order of addition
+    //Print all students in order of addition
     public void printGradebook(String ID) {
         if (studentGrades.isEmpty()) {
             System.out.println("The gradebook is empty.");
-        } else if(studentGrades.containsKey(ID)) {
+        } else if(!studentGrades.containsKey(ID)) {
             System.out.println("Student not found");
         }
         else {
