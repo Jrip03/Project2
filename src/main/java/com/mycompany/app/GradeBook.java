@@ -16,7 +16,7 @@ public class GradeBook {
     // Add a new student with a grade
     public void addStudent(String ID) {
         if (!studentGrades.containsKey(ID)) {
-            studentGrades.put(ID, new ArrayList<Integer>);
+            studentGrades.put(ID, new ArrayList<Integer>());
         } else {
             System.out.println("Student already exists");
         }
@@ -27,26 +27,34 @@ public class GradeBook {
             System.out.println("Student is not fount");
         } else {
             studentGrades.computeIfPresent(ID, (key, gradeList) -> 
-            {gradeList.add(grade);
+            {
+                gradeList.add(grade);
                 return gradeList;
             }
             ); 
         }
     }
 
-    // Get a student's grade
+    // Get a student's grades
     public List<Integer> getGrades(String ID) {
         return studentGrades.get(ID);
     }
 
-    // Update a student's grade
-    public void updateGrade(String ID, Integer newGrade) {
+    // Update a student's grade at a specific index and reinsert the updated list
+    public void updateGrade(String ID, int index, int newGrade) {
         if (studentGrades.containsKey(ID)) {
-            studentGrades.computeIfPresent(ID, (Key,value) -> value.add(newGrade));
+            ArrayList<Integer> grades = studentGrades.get(ID);
+            if (index >= 0 && index < grades.size()) {
+                grades.set(index, newGrade);
+                studentGrades.put(ID, grades);  
+            } else {
+                System.out.println("Invalid index for grades list");
+            }
         } else {
             System.out.println("Student not found");
         }
     }
+
     
     // Print all students in order of addition
     public void printGradebook(String ID) {
