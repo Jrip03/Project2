@@ -5,6 +5,7 @@ public class Student {
    private String firstName;
    private String lastName;
    
+   // A Constructor for the student class
    public Student(String fName, String lName, String ID) {
      studentID = ID;
      firstName = fName;
@@ -14,7 +15,6 @@ public class Student {
    public String getStudentID() {
     return studentID;
    }
-
    public void setStudentID(String studentID) {
     this.studentID = studentID;
    }
