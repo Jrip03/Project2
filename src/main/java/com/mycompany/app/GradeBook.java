@@ -12,7 +12,7 @@ public class GradeBook {
         studentGrades = new HashMap<>();
     }
 
-    // Add a new student with a grade
+    // Adds a new student
     public void addStudent(String ID) {
         if (!studentGrades.containsKey(ID)) {
             studentGrades.put(ID, new List<Integer>);

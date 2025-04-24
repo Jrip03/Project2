@@ -12,6 +12,7 @@ public class Student {
      lastName = lName;
    }
 
+   //Getter and setter for studentID
    public String getStudentID() {
     return studentID;
    }
@@ -19,18 +20,18 @@ public class Student {
     this.studentID = studentID;
    }
 
+   //Getter and setter for firstName
    public String getFirstName() {
     return firstName;
    }
-
    public void setFirstName(String firstName) {
     this.firstName = firstName;
    }
 
+   //Getter and setter for LastNmae
    public String getLastName() {
     return lastName;
    }
-
    public void setLastName(String lastName) {
     this.lastName = lastName;
    }
