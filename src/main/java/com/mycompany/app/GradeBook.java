@@ -17,7 +17,7 @@ public class GradeBook {
      * By using ID
      * If the student already exists it would print a statement
     */
-    public void addStudent(String ID) {
+    public boolean addStudent(String ID) {
         if (!studentGrades.containsKey(ID)) {
             studentGrades.put(ID, new ArrayList<Integer>());
             return true;
@@ -42,7 +42,6 @@ public class GradeBook {
     }
 
     // A method to get a student's grades with their ID.
-    public List<Integer> getGrades(String ID) {
     public boolean addGrade(String ID, Integer grade) {
         if (!studentGrades.containsKey(ID)) {
             System.out.println("Student not found in gradebook");
@@ -98,5 +97,3 @@ public class GradeBook {
         }
     }
  }
-
-}
