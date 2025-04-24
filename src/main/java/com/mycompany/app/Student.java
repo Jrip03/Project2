@@ -5,7 +5,7 @@ public class Student {
    private String firstName;
    private String lastName;
    
-   // A Constructor for the student class
+   //A Constructor for the student class
    public Student(String fName, String lName, String ID) {
      studentID = ID;
      firstName = fName;
@@ -28,7 +28,7 @@ public class Student {
     this.firstName = firstName;
    }
 
-   //Getter and setter for LastNmae
+   //Getter and setter for LastName
    public String getLastName() {
     return lastName;
    }

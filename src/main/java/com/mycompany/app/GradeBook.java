@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GradeBook {
+    //I have tried storing each students grades and ID's with HashMap.
     private HashMap<String, ArrayList<Integer>> studentGrades;
 
     //A Constructor for the GradeBook class.
@@ -13,7 +14,10 @@ public class GradeBook {
         studentGrades = new HashMap<>();
     }
 
-    //Adds a new student
+    /* Adds a new student
+     * By using ID
+     * If the student already exists it would print a statement
+    */
     public void addStudent(String ID) {
         if (!studentGrades.containsKey(ID)) {
             studentGrades.put(ID, new ArrayList<Integer>());
@@ -22,6 +26,10 @@ public class GradeBook {
         }
     }
 
+    /* A method to add a new grade to the student's grade list
+     * First I have checked if the student exists, if not it would print a statement
+     * Then uses computeIfPresent to add grade to the list
+     */
     public void addGrade(String ID, Integer grade) {
         if (!studentGrades.containsKey(ID)) {
             System.out.println("Student not found");
@@ -35,12 +43,15 @@ public class GradeBook {
         }
     }
 
-    // Get a student's grades
+    // A method to get a student's grades with their ID.
     public List<Integer> getGrades(String ID) {
         return studentGrades.get(ID);
     }
 
-    // Update a student's grade at a specific index and reinsert the updated list
+    /* Updates a specific grade for a student
+     * First I have checked if the student exists
+     * Then checked if the index is valid, If it is valid, Updates the grade in the list.
+    */
     public void updateGrade(String ID, int index, int newGrade) {
         if (studentGrades.containsKey(ID)) {
             ArrayList<Integer> grades = studentGrades.get(ID);
@@ -56,11 +67,15 @@ public class GradeBook {
     }
 
     
-    //Print all students in order of addition
+    /* This method helped in printing all the grades for a student
+     * First I have checked if the gradebook is empty
+     * Then checked if the student exists
+     * After passing both the checks I made it loop through the grade list and print the grades.
+     */
     public void printGradebook(String ID) {
         if (studentGrades.isEmpty()) {
             System.out.println("The gradebook is empty.");
-        } else if(!studentGrades.containsKey(ID)) {
+        } else if (!studentGrades.containsKey(ID)) {
             System.out.println("Student not found");
         }
         else {
