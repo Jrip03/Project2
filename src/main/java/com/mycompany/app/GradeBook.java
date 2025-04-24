@@ -13,7 +13,10 @@ public class GradeBook {
         studentGrades = new HashMap<>();
     }
 
-    //Adds a new student
+    /* Adds a new student
+     * By using ID
+     * If the student already exists it would print a statement
+    */
     public void addStudent(String ID) {
         if (!studentGrades.containsKey(ID)) {
             studentGrades.put(ID, new ArrayList<Integer>());
@@ -24,15 +27,22 @@ public class GradeBook {
         }
     }
 
-    public void addGrade(String ID, Integer grade) {
-        if (!studentGrades.containsKey(ID)) {
-            System.out.println("Student not found");
+    /* A method to add a new grade to the student's grade list
+     * First I have checked if the student exists, if not it would print a statement
+     * Then uses computeIfPresent to add grade to the list
+     */
+    public boolean removeStudent(String ID) {
+        if (studentGrades.containsKey(ID)) {
+            studentGrades.remove(ID);
+            return true;
         } else {
             System.out.println("Student does not exists in gradebook");
             return false;
         }
     }
 
+    // A method to get a student's grades with their ID.
+    public List<Integer> getGrades(String ID) {
     public boolean addGrade(String ID, Integer grade) {
         if (!studentGrades.containsKey(ID)) {
             System.out.println("Student not found in gradebook");
@@ -47,7 +57,7 @@ public class GradeBook {
     }
 
     // Get a student's grades
-    public List<Integer> getGrades(String ID) {
+    public ArrayList<Integer> getGrades(String ID) {
         return studentGrades.get(ID);
     }
 
@@ -79,7 +89,7 @@ public class GradeBook {
         if (studentGrades.isEmpty()) {
             System.out.println("The gradebook is empty.");
         } else if(!studentGrades.containsKey(ID)) {
-            System.out.println("Student not found");
+            System.out.println("Student not found in gradebook");
         }
         else {
             for(int i=0; i<studentGrades.get(ID).size(); i++) {
@@ -87,6 +97,6 @@ public class GradeBook {
             }
         }
     }
-
+ }
 
 }
