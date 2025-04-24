@@ -1,6 +1,6 @@
 package com.mycompany.app;
+
 import java.io.*;
-import java.util.List;
 import java.util.ArrayList;
 
 public class File {
