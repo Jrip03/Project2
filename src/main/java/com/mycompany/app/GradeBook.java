@@ -3,9 +3,10 @@ package com.mycompany.app;
 //Import statements for HashMap and ArrayList.
 import java.util.HashMap;
 import java.util.ArrayList; 
+import java.util.List;
 
 public class GradeBook {
-    private HashMap<String, List<Integer>> studentGrades;
+    private HashMap<String, ArrayList<Integer>> studentGrades;
 
     //A Constructor for the GradeBook class.
     public GradeBook() {
@@ -15,7 +16,7 @@ public class GradeBook {
     // Add a new student with a grade
     public void addStudent(String ID) {
         if (!studentGrades.containsKey(ID)) {
-            studentGrades.put(ID, new List<Integer>);
+            studentGrades.put(ID, new ArrayList<Integer>);
         } else {
             System.out.println("Student already exists");
         }
@@ -25,7 +26,11 @@ public class GradeBook {
         if (!studentGrades.containsKey(ID)) {
             System.out.println("Student is not fount");
         } else {
-            studentGrades.computeIfPresent(ID, (Key,value) -> value.add(grade)); 
+            studentGrades.computeIfPresent(ID, (key, gradeList) -> 
+            {gradeList.add(grade);
+                return gradeList;
+            }
+            ); 
         }
     }
 
@@ -37,7 +42,7 @@ public class GradeBook {
     // Update a student's grade
     public void updateGrade(String ID, Integer newGrade) {
         if (studentGrades.containsKey(ID)) {
-            studentGrades.computeIfPresent(ID, (Key,value) -> value.add(grade));
+            studentGrades.computeIfPresent(ID, (Key,value) -> value.add(newGrade));
         } else {
             System.out.println("Student not found");
         }
@@ -51,7 +56,7 @@ public class GradeBook {
             System.out.println("Student not found");
         }
         else {
-            for(i=0; i<studentGrades.get(ID).size(); i++) {
+            for(int i=0; i<studentGrades.get(ID).size(); i++) {
                 System.out.print(studentGrades.get(ID).get(i) + " ");
             }
         }
