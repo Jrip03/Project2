@@ -13,10 +13,15 @@ public class GradeBook {
         studentGrades = new HashMap<>();
     }
 
-    /* Adds a new student
+    /**
+     * Adds a new student
      * By using ID
      * If the student already exists it would print a statement
-    */
+     * 
+     * @param ID The student's ID
+     * @return true if adding a student is successful
+     * @return false if the student already exists
+     */
     public boolean addStudent(String ID) {
         if (!studentGrades.containsKey(ID)) {
             studentGrades.put(ID, new ArrayList<Integer>());
@@ -27,9 +32,12 @@ public class GradeBook {
         }
     }
 
-    /* A method to add a new grade to the student's grade list
-     * First I have checked if the student exists, if not it would print a statement
-     * Then uses computeIfPresent to add grade to the list
+    /**
+     * A method to remove a student from the gradebook
+     * 
+     * @param ID student's ID
+     * @return true if the student was removed
+     * @return false when the student doesn't exist
      */
     public boolean removeStudent(String ID) {
         if (studentGrades.containsKey(ID)) {
@@ -41,7 +49,14 @@ public class GradeBook {
         }
     }
 
-    // A method to get a student's grades with their ID.
+    /**
+     * A method to add a grade to student's list of grades.
+     * 
+     * @param ID The student's ID
+     * @param grade student's grade to be added
+     * @return true if the grade was added
+     * @return false if the student is not found
+     */
     public boolean addGrade(String ID, Integer grade) {
         if (!studentGrades.containsKey(ID)) {
             System.out.println("Student not found in gradebook");
@@ -55,15 +70,25 @@ public class GradeBook {
 
     }
 
-    // Get a student's grades
+    /**
+     *  returns a student's grades
+     * 
+     *  @param ID The student's ID
+    */
     public ArrayList<Integer> getGrades(String ID) {
         return studentGrades.get(ID);
     }
 
-    /* Updates a specific grade for a student
+
+    /**
+     * Updates a specific grade for a student
      * First I have checked if the student exists
      * Then checked if the index is valid, If it is valid, Updates the grade in the list.
-    */
+     * 
+     * @param ID The student's ID
+     * @param index To update the index of the grade
+     * @param neGrade To replace old grade with a new grade
+     */
     public void updateGrade(String ID, int index, int newGrade) {
         if (studentGrades.containsKey(ID)) {
             ArrayList<Integer> grades = studentGrades.get(ID);
@@ -79,10 +104,13 @@ public class GradeBook {
     }
 
     
-    /* This method helped in printing all the grades for a student
+    /**
+     * This method helped in printing all the grades for a student
      * First I have checked if the gradebook is empty
      * Then checked if the student exists
      * After passing both the checks I made it loop through the grade list and print the grades.
+     * 
+     * @param ID The student's ID
      */
     public void printGradebook(String ID) {
         if (studentGrades.isEmpty()) {
