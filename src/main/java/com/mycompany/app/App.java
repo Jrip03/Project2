@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------------------
+/*----------------------------------j-----------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License. See LICENSE in the project root for license information.
  *---------------------------------------------------------------------------------------*/
@@ -9,12 +9,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 public class App {
     private static Scanner in = new Scanner(System.in);
     private static File fileManager = new File();
     // CWE-766
     private static ArrayList<Course> courseList = new ArrayList<Course>();
+
+    private static final int maxAttempts = 100;
 
     public static void main(String[] args) throws IOException {
 
@@ -26,7 +29,11 @@ public class App {
 
         boolean succesfullExit = false;
 
-        while (!succesfullExit) {
+        int termination = 0;
+
+        // CWE-606
+        while (!succesfullExit && termination < 1000) {
+
             System.out.println("1. Import another course.");
             System.out.println("2. Create a new course.");
             System.out.println("3. Edit course.");
@@ -37,43 +44,52 @@ public class App {
             System.out.println("8. Delete student.");
             System.out.println("9. Save to file.");
             System.out.println("0. Exit.");
-            System.out.print("Enter your selection: ");
 
-            int userSelection = in.nextInt();
-            in.nextLine();
+            int userSelection = mustGetIntInput(maxAttempts, "Enter your selection: ");
 
             switch (userSelection) {
                 case 1:
                     importCourse();
+                    termination = 0;
                     break;
                 case 2:
                     createNewCourse();
+                    termination = 0;
                     break;
                 case 3:
                     editCourse();
+                    termination = 0;
                     break;
                 case 4:
                     gradeAssignment();
+                    termination = 0;
                     break;
                 case 5:
                     editGrade();
+                    termination = 0;
                     break;
                 case 6:
                     getGrade();
+                    termination = 0;
                     break;
                 case 7:
                     addStudent();
+                    termination = 0;
                     break;
                 case 8:
                     deleteStudent();
+                    termination = 0;
                     break;
                 case 9:
                     saveFile();
+                    termination = 0;
                     break;
                 case 0:
                     succesfullExit = ExitProgram();
+                    termination = 0;
                     break;
                 default:
+                    termination++;
                     System.out.println("Invalid input. Try again.");
                     break;
             }
@@ -82,183 +98,137 @@ public class App {
         in.close();
     }
 
-    private static void getGrade() {
+    private static boolean secondLevelMenu(String expectedAction, Boolean showStudents) {
         boolean exit = false;
+        int termination = 0;
 
-        while (!exit) {
-            System.out.println("Select an option:");
-            System.out.println("1. Print courses.");
-            System.out.println("2. Print students in a course.");
-            System.out.println("3. Get student grades.");
-            System.out.println("0. Go to previous menu.");
+        while (!exit && termination < 1000) {
+            if (showStudents) {
+                System.out.println("Select an option:");
+                System.out.println("1. Print courses.");
+                System.out.println("2. Print students in a course.");
+                System.out.println("3. " + expectedAction);
+                System.out.println("0. Go to previous menu.");
+            } else {
+                System.out.println("Select an option:");
+                System.out.println("1. Print courses.");
+                System.out.println("2. " + expectedAction);
+                System.out.println("0. Go to previous menu.");
+            }
 
-            System.out.print("Enter your selection: ");
-            int menuSelection = in.nextInt();
-            in.nextLine();
+            int input = mustGetIntInput(maxAttempts, "Enter your selection: ");
 
-            String editInput;
-
-            switch (menuSelection) {
+            switch (input) {
+                case 0:
+                    return false;
                 case 1:
-                    PrintCourses();
+                    termination = 0;
+                    printCourses();
                     break;
                 case 2:
-                    System.out.print("Enter course id: ");
-                    editInput = in.nextLine();
-                    Course course = findCourse(editInput);
-                    if (course == null) {
-                        System.out.println("Course does not exits");
-                        return;
+                    if (showStudents) {
+                        termination = 0;
+                        System.out.print("Enter course id: ");
+                        String courseID = in.nextLine();
+                        Course course = findCourse(courseID);
+                        if (course == null) {
+                            System.out.println("Course does not exits");
+                            break;
+                        }
+                        printStudent(course);
+                        break;
+                    } else {
+                        return true;
                     }
-                    printStudent(course);
-                    break;
-
                 case 3:
-                    System.out.print("Enter course id: ");
-                    editInput = in.nextLine();
-                    Course course3 = findCourse(editInput);
-                    if (course3 == null) {
-                        System.out.println("Course does not exits");
-                        return;
+                    if (showStudents) {
+                        return true;
                     }
-                    System.out.print("Enter student id: ");
-                    String sName = in.nextLine();
-
-                    Student stu = findStudnet(sName, course3);
-
-                    if (stu == null) {
-                        System.out.println("Student does not exits. Try again");
-                        return;
-                    }
-
-                    System.out.println(course3.getGrades(stu));
-
-                    exit = true;
-                    break;
-                case 0:
-                    return;
-
                 default:
-                    System.out.println("Invalid input. Try again.");
-                    exit = true;
+                    System.out.println("Invalid input, try again.");
+                    termination++;
                     break;
             }
+
+        }
+
+        return false;
+    }
+
+    private static void getGrade() {
+        String expectedAction = "Get student grades.";
+        Boolean showStudents = true;
+
+        if (secondLevelMenu(expectedAction, showStudents)) {
+            System.out.print("Enter course id: ");
+            String courseID = in.nextLine();
+            Course course = findCourse(courseID);
+            if (course == null) {
+                System.out.println("Course does not exits");
+                return;
+            }
+            System.out.print("Enter student id: ");
+            String sName = in.nextLine();
+
+            Student stu = findStudnet(sName, course);
+
+            if (stu == null) {
+                System.out.println("Student does not exits. Try again");
+                return;
+            }
+
+            System.out.println(course.getGrades(stu));
         }
 
     }
 
     private static void editGrade() {
-        boolean exit = false;
+        String expectedAction = "Get student grades.";
+        Boolean showStudents = true;
 
-        while (!exit) {
-            System.out.println("Select an option:");
-            System.out.println("1. Print courses.");
-            System.out.println("2. Print students in a course.");
-            System.out.println("3. Update studnet grade.");
-            System.out.println("0. Go to previous menu.");
+        if (secondLevelMenu(expectedAction, showStudents)) {
+            System.out.print("Enter course id: ");
+            String courseID = in.nextLine();
+            Course course = findCourse(courseID);
+            if (course == null) {
+                System.out.println("Course does not exits");
+                return;
+            }
 
-            System.out.print("Enter your selection: ");
-            int menuSelection = in.nextInt();
+            System.out.print("Enter student it: ");
+            String sName = in.nextLine();
+            Student stu = findStudnet(sName, course);
+            if (stu == null) {
+                System.out.println("Student does not exits. Try again");
+                return;
+            }
+
+            System.out.print("Enter grade index to update: ");
+            int index = in.nextInt();
             in.nextLine();
 
-            String editInput;
+            System.out.print("Enter new grade: ");
+            int grade = in.nextInt();
+            in.nextLine();
 
-            switch (menuSelection) {
-                case 1:
-                    PrintCourses();
-                    break;
-                case 2:
-                    System.out.print("Enter course id: ");
-                    editInput = in.nextLine();
-                    Course course = findCourse(editInput);
-                    if (course == null) {
-                        System.out.println("Course does not exits");
-                        return;
-                    }
-                    printStudent(course);
-                    break;
-
-                case 3:
-                    System.out.print("Enter course id: ");
-                    editInput = in.nextLine();
-                    Course course3 = findCourse(editInput);
-                    if (course3 == null) {
-                        System.out.println("Course does not exits");
-                        return;
-                    }
-                    System.out.print("Enter student it: ");
-                    String sName = in.nextLine();
-
-                    Student stu = findStudnet(sName, course3);
-
-                    if (stu == null) {
-                        System.out.println("Student does not exits. Try again");
-                        return;
-                    }
-
-                    System.out.print("Enter grade index to update: ");
-                    int index = in.nextInt();
-                    in.nextLine();
-
-                    System.out.print("Enter new grade: ");
-                    int grade = in.nextInt();
-                    in.nextLine();
-
-                    course3.editGrade(stu, index, grade);
-                    exit = true;
-                    break;
-                case 0:
-                    return;
-
-                default:
-                    System.out.println("Invalid input. Try again.");
-                    exit = true;
-                    break;
-            }
+            course.editGrade(stu, index, grade);
         }
 
     }
 
     private static void gradeAssignment() {
-        boolean exit = false;
+        String expectedAction = "Grade Assignment";
+        Boolean showStudents = false;
 
-        while (!exit) {
-            System.out.println("Select an option:");
-            System.out.println("1. Print courses.");
-            System.out.println("2. Enter course id.");
-            System.out.println("0. Go to previous menu.");
-
-            System.out.print("Enter your selection: ");
-            int menuSelection = in.nextInt();
-            in.nextLine();
-
-            String editInput;
-
-            switch (menuSelection) {
-                case 1:
-                    PrintCourses();
-                    break;
-                case 2:
-                    System.out.print("Enter course id: ");
-                    editInput = in.nextLine();
-                    Course course = findCourse(editInput);
-                    in.nextLine();
-                    if (course == null) {
-                        System.out.println("Course does not exits");
-                        return;
-                    }
-                    course.gradeAssignment(in);
-                    exit = true;
-                    break;
-
-                case 0:
-                    return;
-
-                default:
-                    System.out.println("Invalid input. Try again.");
-                    exit = true;
-                    break;
+        if (secondLevelMenu(expectedAction, showStudents)) {
+            System.out.print("Enter course id: ");
+            String courseID = in.nextLine();
+            Course course = findCourse(courseID);
+            if (course == null) {
+                System.out.println("Course does not exits");
+                return;
             }
+            course.gradeAssignment(in);
         }
     }
 
@@ -285,178 +255,112 @@ public class App {
     private static void importCourse() throws IOException, FileNotFoundException {
         System.out.print("Name of file to import? ");
         String inputString = in.nextLine();
-        // try {
-        Course currentCourse = fileManager.readFile(inputString);
-        if (currentCourse != null) {
-            courseList.add(currentCourse);
+        try {
+            Course currentCourse = fileManager.readFile(inputString);
+            if (currentCourse != null) {
+                courseList.add(currentCourse);
+            }
+        } catch (Exception e) {
+            if (e instanceof FileNotFoundException) {
+                importCourse();
+                return;
+            } else {
+                System.out.println("Exiting the program.");
+                throw e;
+            }
         }
-        // } catch (Exception e) {
-        // if (e instanceof FileNotFoundException) {
-        // importCourse();
-        // return;
-        // } else {
-        // System.out.println("Exiting the program.");
-        // throw e;
-        // }
-        // }
     }
 
     private static void editCourse() {
+        String expectedAction = "Edit course.";
+        Boolean showStudents = false;
 
-        boolean exit = false;
-
-        while (!exit) {
-            System.out.println("Select an option:");
-            System.out.println("1. Print courses.");
-            System.out.println("2. Enter course id.");
-            System.out.println("0. Go to previous menu.");
-
-            System.out.print("Enter your selection: ");
-            int menuSelection = in.nextInt();
-            in.nextLine();
-
-            String editInput;
-
-            switch (menuSelection) {
-                case 1:
-                    PrintCourses();
-                    break;
-                case 2:
-                    System.out.print("Enter course id: ");
-                    editInput = in.nextLine();
-                    Course course = findCourse(editInput);
-                    if (course == null) {
-                        System.out.println("Course does not exits");
-                        return;
-                    }
-                    System.out.print("Enter new course id: ");
-                    String newName = in.nextLine();
-
-                    course.setCourseName(newName);
-                    break;
-
-                case 0:
-                    return;
-
-                default:
-                    System.out.println("Invalid input. Try again.");
-                    exit = true;
-                    break;
+        if (secondLevelMenu(expectedAction, showStudents)) {
+            System.out.print("Enter course id: ");
+            String courseID = in.nextLine();
+            Course course = findCourse(courseID);
+            if (course == null) {
+                System.out.println("Course does not exits");
+                return;
             }
-        }
+            System.out.print("Enter new course name: ");
+            String newName = in.nextLine();
 
+            course.setCourseName(newName);
+        }
     }
 
     private static void saveFile() throws IOException {
-        System.out.println("Select an option:");
-        System.out.println("1. Print courses.");
-        System.out.println("2. Save file");
-        System.out.println("0. Go to previous menu.");
-        int menuSelection = in.nextInt();
-        in.nextLine();
+        String expectedAction = "Save file";
+        Boolean showStudents = false;
 
-        switch (menuSelection) {
-            case 1:
-                PrintCourses();
-                break;
-            case 2:
-                System.out.print("Enter ID of course you want to save. ");
-                String courseId = in.nextLine();
+        if (secondLevelMenu(expectedAction, showStudents)) {
+            System.out.print("Enter ID of course you want to save. ");
+            String courseId = in.nextLine();
 
-                Course courseToSave = findCourse(courseId);
+            Course courseToSave = findCourse(courseId);
 
-                if (courseToSave == null) {
-                    System.out.println("Course does not exist. Try again.");
-                    return;
-                }
+            if (courseToSave == null) {
+                System.out.println("Course does not exist. Try again.");
+                return;
+            }
 
-                fileManager.writeFile(courseToSave);
-                break;
-            default:
-                System.out.println("Invalid input, try again.");
-                break;
+            fileManager.writeFile(courseToSave);
         }
     }
 
     private static void addStudent() {
-        System.out.println("Select an option:");
-        System.out.println("1. Print courses.");
-        System.out.println("2. Add student");
-        System.out.println("0. Go to previous menu.");
-        System.out.print("Enter selection: ");
-        int menuSelection = in.nextInt();
-        in.nextLine();
+        String expectedAction = "Add Student";
+        Boolean showStudents = false;
 
-        switch (menuSelection) {
-            case 1:
-                PrintCourses();
-                break;
-            case 2:
-                System.out.print("Enter course ID of which you want to add a student to: ");
-                String courseId = in.nextLine();
-                Course courseToEdit = findCourse(courseId);
-                if (courseToEdit == null) {
-                    System.out.println("Course ID does not exist.");
-                    return;
-                }
-                System.out.print("Enter student first name: ");
-                String fName = in.nextLine();
-                System.out.print("Enter student last name: ");
-                String lName = in.nextLine();
-                System.out.print("Enter student id: ");
-                String stuId = in.nextLine();
-                if (findStudnet(stuId, courseToEdit) != null) {
-                    System.out.println("Student allready exists. Can not add");
-                    return;
-                }
-                courseToEdit.addStudent(new Student(fName, lName, stuId));
-                System.out.printf("Added %s, %s to student list\n", lName, fName);
-                break;
-
-            default:
-                System.out.println("Invalid input, try again.");
-                break;
+        if (secondLevelMenu(expectedAction, showStudents)) {
+            System.out.print("Enter course ID of which you want to add a student to: ");
+            String courseId = in.nextLine();
+            Course courseToEdit = findCourse(courseId);
+            if (courseToEdit == null) {
+                System.out.println("Course ID does not exist.");
+                return;
+            }
+            System.out.print("Enter student first name: ");
+            String fName = in.nextLine();
+            System.out.print("Enter student last name: ");
+            String lName = in.nextLine();
+            System.out.print("Enter student id: ");
+            String stuId = in.nextLine();
+            if (findStudnet(stuId, courseToEdit) != null) {
+                System.out.println("Student allready exists. Can not add");
+                return;
+            }
+            courseToEdit.addStudent(new Student(fName, lName, stuId));
+            System.out.printf("Added %s, %s to student list\n", lName, fName);
         }
 
     }
 
     private static void deleteStudent() {
-        System.out.println("Select an option:");
-        System.out.println("1. Print courses.");
-        System.out.println("2. Enter course ID.");
-        System.out.println("0. Go to previous menu.");
-        int menuSelection = in.nextInt();
-        in.nextLine();
+        String expectedAction = "Delete Student";
+        Boolean showStudents = true;
 
-        switch (menuSelection) {
-            case 1:
-                PrintCourses();
-                break;
-            case 2:
-                String courseID = in.nextLine();
-                Course courseToEdit = findCourse(courseID);
-                if (courseToEdit == null) {
-                    System.out.println("Course does not exist");
-                }
-                printStudent(courseToEdit);
-                System.out.print("Enter ID of the student to delete: ");
-                String idToDel = in.nextLine();
+        if (secondLevelMenu(expectedAction, showStudents)) {
+            System.out.print("Enter course id: ");
+            String courseID = in.nextLine();
+            Course courseToEdit = findCourse(courseID);
+            if (courseToEdit == null) {
+                System.out.println("Course does not exist");
+            }
+            System.out.print("Enter ID of the student to delete: ");
+            String idToDel = in.nextLine();
 
-                if (findStudnet(idToDel, courseToEdit) == null) {
-                    System.out.println("Student with this id does not exist. Try again.");
-                    return;
-                }
+            if (findStudnet(idToDel, courseToEdit) == null) {
+                System.out.println("Student with this id does not exist. Try again.");
+                return;
+            }
 
-                // CWE-357
-                System.out.print("Are you sure you want to delete the student? This can't be undone (y/N)");
-                if (in.nextLine().toUpperCase().equals("Y")) {
-                    courseToEdit.removeStudent(courseToEdit.getStudent(idToDel));
-                }
-                break;
-
-            default:
-                System.out.println("Invalid input, please try again.");
-                break;
+            // CWE-357
+            System.out.print("Are you sure you want to delete the student? This can't be undone (y/N)");
+            if (in.nextLine().toUpperCase().equals("Y")) {
+                courseToEdit.removeStudent(courseToEdit.getStudent(idToDel));
+            }
         }
 
     }
@@ -478,7 +382,7 @@ public class App {
         System.out.printf("Students in course %s\n", course.getCourseID());
         for (int i = 0; i < students.size(); i++) {
             Student stu = students.get(i);
-            System.out.printf("First name: %s, Last name: %s, ID: %s", stu.getFirstName(), stu.getLastName(),
+            System.out.printf("First name: %s, Last name: %s, ID: %s\n", stu.getFirstName(), stu.getLastName(),
                     stu.getStudentID());
         }
     }
@@ -500,7 +404,7 @@ public class App {
         return null;
     }
 
-    private static void PrintCourses() {
+    private static void printCourses() {
         if (courseList.size() == 0) {
             System.out.println("There are currently no courses present.");
             return;
@@ -521,7 +425,6 @@ public class App {
                 .print("All unsaved progress will be lost, are you user you want to exit the program? (y/N) ");
         boolean properInput = false;
 
-        // CWE-606
         while (!properInput) {
             String inputString = in.nextLine();
             if (inputString.toUpperCase().equals("Y")) {
@@ -534,6 +437,28 @@ public class App {
             }
         }
         return false;
+    }
+
+    private static int mustGetIntInput(int maxAttempts, String line) {
+        int attempt = 0;
+        while (attempt < maxAttempts) {
+            try {
+                System.out.print(line);
+                int input = in.nextInt();
+                in.nextLine();
+                return input;
+            } catch (InputMismatchException e) {
+                attempt++;
+                System.out.println("Invalid choice, try again");
+                in.nextLine();
+                continue;
+            }
+        }
+
+        System.out.println("You are a bad person! Exiting.");
+        System.exit(1);
+        // unreachable
+        return 0;
     }
 
 }
