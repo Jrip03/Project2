@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Course{
-    private final String courseName;
+    private  String courseName;
     private final String courseID;
     private int classSize;
     private ArrayList<Student> roster;
@@ -190,5 +190,9 @@ public class Course{
             str = str + getGrades(roster.get(i));
         } 
         return str;
+    }
+
+    public void setCourseName(String newName) {
+        this.courseName = newName;
     }
 }

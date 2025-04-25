@@ -79,7 +79,7 @@ public class App {
         in.close();
     }
 
-    private static void createNewCourse(){
+    private static void createNewCourse() {
         System.out.print("Enter profesor first name: ");
         String fName = in.nextLine();
         System.out.print("Enter profesor last name: ");
@@ -149,8 +149,7 @@ public class App {
                     System.out.print("Enter new course name. ");
                     String newName = in.nextLine();
 
-                    // todo
-                    // course.updateName(newName);
+                    course.setCourseName(newName);
                     break;
 
                 case 0:
