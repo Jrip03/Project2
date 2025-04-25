@@ -181,7 +181,9 @@ public class Course {
      */
     @Override
     public String toString() {
-        String str = courseID + ": " + courseName;
+        String str = classSize + "\n";
+        str = str + gradeBook.getNumAssignments();
+        str = str + "\n" + courseID + ": " + courseName;
         str = str + "\nTeacher: " + teacher.getFirstName() + " " + teacher.getLastName();
         for (int i = 0; i < classSize; i++) {
             str = str + "\n" + roster.get(i).getFirstName() + " " + roster.get(i).getLastName() + ": ";

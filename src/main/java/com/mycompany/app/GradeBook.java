@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class GradeBook {
     //I have tried storing each students grades and ID's with HashMap.
     private HashMap<String, ArrayList<Integer>> studentGrades;
+    private int numAssignments;
 
     //A Constructor for the GradeBook class.
     public GradeBook() {
@@ -64,6 +65,7 @@ public class GradeBook {
         }
         studentGrades.computeIfPresent(ID, (key, gradeList) -> {
             gradeList.add(grade);
+            numAssignments++;
             return gradeList;
         });
         return true;
@@ -124,4 +126,9 @@ public class GradeBook {
             }
         }
     }
+
+    public int getNumAssignments() {
+        return numAssignments;
+    }
+
  }
