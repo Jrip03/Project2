@@ -53,10 +53,13 @@ public class App {
                     editCourse();
                     break;
                 case 4:
+                    gradeAssignment();
                     break;
                 case 5:
+                    editGrade();
                     break;
                 case 6:
+                    getGrade();
                     break;
                 case 7:
                     addStudent();
@@ -77,6 +80,179 @@ public class App {
         }
 
         in.close();
+    }
+
+    private static void getGrade() {
+        boolean exit = false;
+
+        while (!exit) {
+            System.out.println("Select an option:");
+            System.out.println("1. Print courses.");
+            System.out.println("2. Print students in a course.");
+            System.out.println("3. Get student grades.");
+            System.out.println("0. Go to previous menu.");
+
+            System.out.print("Enter your selection: ");
+            int menuSelection = in.nextInt();
+            in.nextLine();
+
+            String editInput;
+
+            switch (menuSelection) {
+                case 1:
+                    PrintCourses();
+                    break;
+                case 2:
+                    System.out.print("Enter course name. ");
+                    editInput = in.nextLine();
+                    Course course = findCourse(editInput);
+                    if (course == null) {
+                        System.out.println("Course does not exits");
+                        return;
+                    }
+                    printStudent(course);
+                    break;
+
+                case 3:
+                    System.out.print("Enter course name. ");
+                    editInput = in.nextLine();
+                    Course course3 = findCourse(editInput);
+                    if (course3 == null) {
+                        System.out.println("Course does not exits");
+                        return;
+                    }
+                    System.out.print("Enter student name: ");
+                    String sName = in.nextLine();
+
+                    Student stu = findStudnet(sName, course3);
+
+                    if (stu == null) {
+                        System.out.println("Student does not exits. Try again");
+                        return;
+                    }
+
+                    System.out.println(course3.getGrades(stu));
+
+                    exit = true;
+                    break;
+                case 0:
+                    return;
+
+                default:
+                    System.out.println("Invalid input. Try again.");
+                    exit = true;
+                    break;
+            }
+        }
+
+    }
+
+    private static void editGrade() {
+        boolean exit = false;
+
+        while (!exit) {
+            System.out.println("Select an option:");
+            System.out.println("1. Print courses.");
+            System.out.println("2. Print students in a course.");
+            System.out.println("3. Update studnet grade.");
+            System.out.println("0. Go to previous menu.");
+
+            System.out.print("Enter your selection: ");
+            int menuSelection = in.nextInt();
+            in.nextLine();
+
+            String editInput;
+
+            switch (menuSelection) {
+                case 1:
+                    PrintCourses();
+                    break;
+                case 2:
+                    System.out.print("Enter course name. ");
+                    editInput = in.nextLine();
+                    Course course = findCourse(editInput);
+                    if (course == null) {
+                        System.out.println("Course does not exits");
+                        return;
+                    }
+                    printStudent(course);
+                    break;
+
+                case 3:
+                    System.out.print("Enter course name. ");
+                    editInput = in.nextLine();
+                    Course course3 = findCourse(editInput);
+                    if (course3 == null) {
+                        System.out.println("Course does not exits");
+                        return;
+                    }
+                    System.out.print("Enter student name: ");
+                    String sName = in.nextLine();
+
+                    Student stu = findStudnet(sName, course3);
+
+                    if (stu == null) {
+                        System.out.println("Student does not exits. Try again");
+                        return;
+                    }
+
+                    System.out.print("Enter grade index to update: ");
+                    int grade = in.nextInt();
+
+                    course3.editGrade(stu, grade, grade);
+                    exit = true;
+                    break;
+                case 0:
+                    return;
+
+                default:
+                    System.out.println("Invalid input. Try again.");
+                    exit = true;
+                    break;
+            }
+        }
+
+    }
+
+    private static void gradeAssignment() {
+        boolean exit = false;
+
+        while (!exit) {
+            System.out.println("Select an option:");
+            System.out.println("1. Print courses.");
+            System.out.println("2. Enter course id.");
+            System.out.println("0. Go to previous menu.");
+
+            System.out.print("Enter your selection: ");
+            int menuSelection = in.nextInt();
+            in.nextLine();
+
+            String editInput;
+
+            switch (menuSelection) {
+                case 1:
+                    PrintCourses();
+                    break;
+                case 2:
+                    System.out.print("Enter course name. ");
+                    editInput = in.nextLine();
+                    Course course = findCourse(editInput);
+                    if (course == null) {
+                        System.out.println("Course does not exits");
+                        return;
+                    }
+                    course.gradeAssignment();
+                    break;
+
+                case 0:
+                    return;
+
+                default:
+                    System.out.println("Invalid input. Try again.");
+                    exit = true;
+                    break;
+            }
+        }
     }
 
     private static void createNewCourse() {
@@ -157,6 +333,7 @@ public class App {
 
                 default:
                     System.out.println("Invalid input. Try again.");
+                    exit = true;
                     break;
             }
         }
@@ -220,7 +397,7 @@ public class App {
                 String lName = in.nextLine();
                 System.out.print("Enter student id: ");
                 String stuId = in.nextLine();
-                if (findStudnet(stuId, courseToEdit)) {
+                if (findStudnet(stuId, courseToEdit) == null) {
                     System.out.println("Student allready exists. Can not add");
                     return;
                 }
@@ -257,7 +434,7 @@ public class App {
                 System.out.print("Enter ID of the student to delete: ");
                 String idToDel = in.nextLine();
 
-                if (!findStudnet(idToDel, courseToEdit)) {
+                if (findStudnet(idToDel, courseToEdit) == null) {
                     System.out.println("Student with this id does not exist. Try again.");
                     return;
                 }
@@ -276,16 +453,16 @@ public class App {
 
     }
 
-    private static boolean findStudnet(String stuId, Course courseToEdit) {
+    private static Student findStudnet(String stuId, Course courseToEdit) {
         ArrayList<Student> students = courseToEdit.getStudentList();
         for (int i = 0; i < students.size(); i++) {
             String stuIDUppder = stuId.toUpperCase();
             String curStuUpper = students.get(i).getStudentID().toUpperCase();
             if (stuIDUppder.equals(curStuUpper)) {
-                return true;
+                return students.get(i);
             }
         }
-        return false;
+        return null;
     }
 
     private static void printStudent(Course course) {
