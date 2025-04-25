@@ -59,7 +59,6 @@ public class File {
                 for (int j = 0; j < numOfAssignments; j++) {
                     // add assignment grades to gradebook
                     int grade = Integer.parseInt(grades[j]);
-                    System.out.println("Added " + j + " " + grades[j]);
                     course.addSingleGrade(student, grade);
                 }
 
