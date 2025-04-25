@@ -121,7 +121,7 @@ public class App {
                         System.out.println("Course does not exits");
                         return;
                     }
-                    System.out.print("Enter student name: ");
+                    System.out.print("Enter student id: ");
                     String sName = in.nextLine();
 
                     Student stu = findStudnet(sName, course3);
@@ -186,7 +186,7 @@ public class App {
                         System.out.println("Course does not exits");
                         return;
                     }
-                    System.out.print("Enter student name: ");
+                    System.out.print("Enter student it: ");
                     String sName = in.nextLine();
 
                     Student stu = findStudnet(sName, course3);
@@ -200,7 +200,7 @@ public class App {
                     int index = in.nextInt();
                     in.nextLine();
 
-                    System.out.println("Enter new grade");
+                    System.out.print("Enter new grade: ");
                     int grade = in.nextInt();
                     in.nextLine();
 
