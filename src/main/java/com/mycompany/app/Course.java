@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Course{
-    private final String courseName;
+    private  String courseName;
     private final String courseID;
     private int classSize;
     private ArrayList<Student> roster;
@@ -79,8 +79,8 @@ public class Course{
     }
 
     /**
-     * attempts to add a student to the class and gradebook
-     * does not add student if it fails to add the student to gradebook
+     * attempts to add a student to the course and the gradebook
+     * does not add student if it fails to add the student to gradebook first
      * 
      * @param student object of a student
      * 
@@ -95,7 +95,7 @@ public class Course{
     }
 
     /**
-     * attempts to remove a student from course and gradebook
+     * attempts to remove a student from course and the gradebook
      * does not remove student if it fails to remove student from gradebook
      * 
      * @param student object of a student
@@ -190,5 +190,9 @@ public class Course{
             str = str + getGrades(roster.get(i));
         } 
         return str;
+    }
+
+    public void setCourseName(String newName) {
+        this.courseName = newName;
     }
 }
