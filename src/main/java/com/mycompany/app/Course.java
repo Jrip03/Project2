@@ -186,8 +186,10 @@ public class Course {
         str = str + "\n" + courseID + ": " + courseName;
         str = str + "\nTeacher: " + teacher.getFirstName() + " " + teacher.getLastName();
         for (int i = 0; i < classSize; i++) {
-            str = str + "\n" + roster.get(i).getFirstName() + " " + roster.get(i).getLastName() + ": ";
-            str = str + getGrades(roster.get(i));
+            Student curStudent = roster.get(i);
+            str = str + "\n" + curStudent.getStudentID() + " " + curStudent.getFirstName() + " "
+                    + curStudent.getLastName() + ": ";
+            str = str + getGrades(curStudent);
         }
         return str;
     }
