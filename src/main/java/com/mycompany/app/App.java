@@ -197,9 +197,14 @@ public class App {
                     }
 
                     System.out.print("Enter grade index to update: ");
-                    int grade = in.nextInt();
+                    int index = in.nextInt();
+                    in.nextLine();
 
-                    course3.editGrade(stu, grade, grade);
+                    System.out.println("Enter new grade");
+                    int grade = in.nextInt();
+                    in.nextLine();
+
+                    course3.editGrade(stu, index, grade);
                     exit = true;
                     break;
                 case 0:
@@ -237,11 +242,13 @@ public class App {
                     System.out.print("Enter course name. ");
                     editInput = in.nextLine();
                     Course course = findCourse(editInput);
+                    in.nextLine();
                     if (course == null) {
                         System.out.println("Course does not exits");
                         return;
                     }
-                    course.gradeAssignment();
+                    course.gradeAssignment(in);
+                    exit = true;
                     break;
 
                 case 0:
@@ -275,23 +282,23 @@ public class App {
         System.out.println("Succesfully added new course.");
     }
 
-    private static void importCourse() {
+    private static void importCourse() throws IOException, FileNotFoundException {
         System.out.print("Name of file to import? ");
         String inputString = in.nextLine();
-        try {
+        //try {
             Course currentCourse = fileManager.readFile(inputString);
             if (currentCourse != null) {
                 courseList.add(currentCourse);
             }
-        } catch (Exception e) {
-            if (e instanceof FileNotFoundException) {
-                importCourse();
-                return;
-            } else {
-                System.out.println("Exiting the program.");
-                System.exit(1);
-            }
-        }
+        //} catch (Exception e) {
+         //   if (e instanceof FileNotFoundException) {
+          //      importCourse();
+           //     return;
+           // } else {
+            //    System.out.println("Exiting the program.");
+         //       throw e;
+           // }
+       // }
     }
 
     private static void editCourse() {
@@ -397,7 +404,7 @@ public class App {
                 String lName = in.nextLine();
                 System.out.print("Enter student id: ");
                 String stuId = in.nextLine();
-                if (findStudnet(stuId, courseToEdit) == null) {
+                if (findStudnet(stuId, courseToEdit) != null) {
                     System.out.println("Student allready exists. Can not add");
                     return;
                 }

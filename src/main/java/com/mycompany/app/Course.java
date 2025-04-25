@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Course{
-    private  String courseName;
+public class Course {
+    private String courseName;
     private final String courseID;
     private int classSize;
     private ArrayList<Student> roster;
@@ -19,7 +19,7 @@ public class Course{
      * @param studentList initial list of students for the class
      * @param teacher     teacher who teaches course
      */
-    public Course(String name, String id, ArrayList<Student> studentList, Teacher teacher){
+    public Course(String name, String id, ArrayList<Student> studentList, Teacher teacher) {
         courseName = name;
         courseID = id;
         roster = studentList;
@@ -32,7 +32,7 @@ public class Course{
      * 
      * @return returns name of course
      */
-    public String getCourseName(){
+    public String getCourseName() {
         return courseName;
     }
 
@@ -40,7 +40,7 @@ public class Course{
      * 
      * @return returns ID of course
      */
-    public String getCourseID(){
+    public String getCourseID() {
         return courseID;
     }
 
@@ -48,11 +48,11 @@ public class Course{
      * 
      * @return size of the class
      */
-    public int getClassSize(){
+    public int getClassSize() {
         return classSize;
     }
 
-    public ArrayList<Student> getStudentList(){
+    public ArrayList<Student> getStudentList() {
         return roster;
     }
 
@@ -74,7 +74,7 @@ public class Course{
      * 
      * @return object of teacher for the course
      */
-    public Teacher getTeacher(){
+    public Teacher getTeacher() {
         return teacher;
     }
 
@@ -85,7 +85,7 @@ public class Course{
      * @param student object of a student
      * 
      */
-    public void addStudent(Student student){
+    public void addStudent(Student student) {
         if (student == null) {
             System.out.println("Could not remove student: Invalid ID");
         } else if (gradeBook.addStudent(student.getStudentID())) {
@@ -114,8 +114,7 @@ public class Course{
      * grades an assignment for the entire class
      * works through roster asking to input grade for each student
      */
-    public void gradeAssignment(){
-        Scanner input = new Scanner(System.in);
+    public void gradeAssignment(Scanner input) {
         int index = 0;
         System.out.println("Enter the grade for the following students: ");
         while (index < classSize) {
@@ -135,7 +134,6 @@ public class Course{
             }
         }
         System.out.println();
-        input.close();
     }
 
     /**
@@ -182,13 +180,13 @@ public class Course{
      * toSting for printing out a courses information
      */
     @Override
-    public String toString(){
-        String str = courseID + ": " +  courseName;
+    public String toString() {
+        String str = courseID + ": " + courseName;
         str = str + "\nTeacher: " + teacher.getFirstName() + " " + teacher.getLastName();
         for (int i = 0; i < classSize; i++) {
             str = str + "\n" + roster.get(i).getFirstName() + " " + roster.get(i).getLastName() + ": ";
             str = str + getGrades(roster.get(i));
-        } 
+        }
         return str;
     }
 
