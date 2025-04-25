@@ -27,14 +27,14 @@ public class App {
         boolean succesfullExit = false;
 
         while (!succesfullExit) {
-            System.out.println("1. Import another couser.");
+            System.out.println("1. Import another course.");
             System.out.println("2. Create a new course.");
             System.out.println("3. Edit course.");
             System.out.println("4. Input new assignment.");
             System.out.println("5. Update student grade.");
             System.out.println("6. Get student grade.");
             System.out.println("7. Add student.");
-            System.out.println("8. Delete studnet.");
+            System.out.println("8. Delete student.");
             System.out.println("9. Save to file.");
             System.out.println("0. Exit.");
             System.out.print("Enter your selection: ");
@@ -103,7 +103,7 @@ public class App {
                     PrintCourses();
                     break;
                 case 2:
-                    System.out.print("Enter course name. ");
+                    System.out.print("Enter course id: ");
                     editInput = in.nextLine();
                     Course course = findCourse(editInput);
                     if (course == null) {
@@ -114,7 +114,7 @@ public class App {
                     break;
 
                 case 3:
-                    System.out.print("Enter course name. ");
+                    System.out.print("Enter course id: ");
                     editInput = in.nextLine();
                     Course course3 = findCourse(editInput);
                     if (course3 == null) {
@@ -168,7 +168,7 @@ public class App {
                     PrintCourses();
                     break;
                 case 2:
-                    System.out.print("Enter course name. ");
+                    System.out.print("Enter course id: ");
                     editInput = in.nextLine();
                     Course course = findCourse(editInput);
                     if (course == null) {
@@ -179,7 +179,7 @@ public class App {
                     break;
 
                 case 3:
-                    System.out.print("Enter course name. ");
+                    System.out.print("Enter course id: ");
                     editInput = in.nextLine();
                     Course course3 = findCourse(editInput);
                     if (course3 == null) {
@@ -239,7 +239,7 @@ public class App {
                     PrintCourses();
                     break;
                 case 2:
-                    System.out.print("Enter course name. ");
+                    System.out.print("Enter course id: ");
                     editInput = in.nextLine();
                     Course course = findCourse(editInput);
                     in.nextLine();
@@ -285,20 +285,20 @@ public class App {
     private static void importCourse() throws IOException, FileNotFoundException {
         System.out.print("Name of file to import? ");
         String inputString = in.nextLine();
-        //try {
-            Course currentCourse = fileManager.readFile(inputString);
-            if (currentCourse != null) {
-                courseList.add(currentCourse);
-            }
-        //} catch (Exception e) {
-         //   if (e instanceof FileNotFoundException) {
-          //      importCourse();
-           //     return;
-           // } else {
-            //    System.out.println("Exiting the program.");
-         //       throw e;
-           // }
-       // }
+        // try {
+        Course currentCourse = fileManager.readFile(inputString);
+        if (currentCourse != null) {
+            courseList.add(currentCourse);
+        }
+        // } catch (Exception e) {
+        // if (e instanceof FileNotFoundException) {
+        // importCourse();
+        // return;
+        // } else {
+        // System.out.println("Exiting the program.");
+        // throw e;
+        // }
+        // }
     }
 
     private static void editCourse() {
@@ -322,14 +322,14 @@ public class App {
                     PrintCourses();
                     break;
                 case 2:
-                    System.out.print("Enter course name. ");
+                    System.out.print("Enter course id: ");
                     editInput = in.nextLine();
                     Course course = findCourse(editInput);
                     if (course == null) {
                         System.out.println("Course does not exits");
                         return;
                     }
-                    System.out.print("Enter new course name. ");
+                    System.out.print("Enter new course id: ");
                     String newName = in.nextLine();
 
                     course.setCourseName(newName);
