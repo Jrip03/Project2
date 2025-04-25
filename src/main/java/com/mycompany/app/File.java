@@ -27,28 +27,37 @@ public class File {
                 //number of students
                 int numOfStudents = Integer.parseInt(line);
                 int numOfAssignments = Integer.parseInt(line);
-                String arr[] = line.split(" ");
+                br.readLine();
+                String courseLine = br.readLine();
+                String[] arr = courseLine.split(": ");
+                System.out.println(courseLine);
                  courseID = arr[0];
                  courseName = arr[1];
-                 String arraryForTeacher[] = line.split(" ");
+                 String teacherLine = br.readLine();
+                 String arraryForTeacher[] = teacherLine.split(" ");
                  String garbage = arraryForTeacher[0];
                  String teacherFirstName = arraryForTeacher[1];
                  String teacherLastName = arraryForTeacher[2];
                 //Create a new teacher object
                  teacher = new Teacher(teacherFirstName, teacherLastName);
                 //Student
-                String arr2[] = line.split(" ");
+                
                 Course course = new Course(courseName, courseID, studentList, teacher);
                 for(int i=0; i <numOfStudents; i++){
+                    String studentLine = br.readLine();
+                    studentLine.replaceAll("[\\[\\]]", "").trim();
+                    String[] arr2 = studentLine.split(" ");
                     String studentID = arr2[0];
                     String firstName = arr2[1];
                     String lastName = arr2[2];
                     //Create a new student object
                     Student student = new Student(firstName, lastName, studentID);
                     //Add the student to the course
-                    for(int j =3; j < numOfAssignments+3; j++){
+                    int maxGradesToRead = Math.min(numOfAssignments, arr2.length - 3);
+                    for(int j =3; j < maxGradesToRead +3; j++){
                        //add assignment grades to gradebook
-                       course.addSingleGrade(student, Integer.parseInt(arr2[j]));
+                       int grade = Integer.parseInt(arr2[j]);
+                       course.addSingleGrade(student, grade);
                     }
                     
                     course.addStudent(student);
