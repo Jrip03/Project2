@@ -113,6 +113,8 @@ public class Course {
     /**
      * grades an assignment for the entire class
      * works through roster asking to input grade for each student
+     * CWE-431
+     * CWE-241
      */
     public void gradeAssignment(Scanner input) {
         int index = 0;

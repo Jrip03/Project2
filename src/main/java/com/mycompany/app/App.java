@@ -32,6 +32,9 @@ public class App {
         int termination = 0;
 
         // CWE-606
+        // CWE-1095
+        // CWE-115
+        // CWE-241
         while (!succesfullExit && termination < 1000) {
 
             System.out.println("1. Import another course.");
@@ -98,6 +101,7 @@ public class App {
         in.close();
     }
 
+    // CWE-749
     private static boolean secondLevelMenu(String expectedAction, Boolean showStudents) {
         boolean exit = false;
         int termination = 0;
@@ -155,6 +159,7 @@ public class App {
         return false;
     }
 
+    // CWE-749
     private static void getGrade() {
         String expectedAction = "Get student grades.";
         Boolean showStudents = true;
@@ -216,6 +221,7 @@ public class App {
 
     }
 
+    // CWE-749
     private static void gradeAssignment() {
         String expectedAction = "Grade Assignment";
         Boolean showStudents = false;
@@ -232,6 +238,7 @@ public class App {
         }
     }
 
+    // CWE-749
     private static void createNewCourse() {
         System.out.print("Enter profesor first name: ");
         String fName = in.nextLine();
@@ -252,6 +259,7 @@ public class App {
         System.out.println("Succesfully added new course.");
     }
 
+    // CWE-749
     private static void importCourse() throws IOException, FileNotFoundException {
         System.out.print("Name of file to import? ");
         String inputString = in.nextLine();
@@ -271,6 +279,7 @@ public class App {
         }
     }
 
+    // CWE-749
     private static void editCourse() {
         String expectedAction = "Edit course.";
         Boolean showStudents = false;
@@ -290,6 +299,7 @@ public class App {
         }
     }
 
+    // CWE-749
     private static void saveFile() throws IOException {
         String expectedAction = "Save file";
         Boolean showStudents = false;
@@ -309,6 +319,7 @@ public class App {
         }
     }
 
+    // CWE-749
     private static void addStudent() {
         String expectedAction = "Add Student";
         Boolean showStudents = false;
@@ -337,6 +348,7 @@ public class App {
 
     }
 
+    // CWE-749
     private static void deleteStudent() {
         String expectedAction = "Delete Student";
         Boolean showStudents = true;
@@ -365,6 +377,7 @@ public class App {
 
     }
 
+    // CWE-749
     private static Student findStudnet(String stuId, Course courseToEdit) {
         ArrayList<Student> students = courseToEdit.getStudentList();
         for (int i = 0; i < students.size(); i++) {
@@ -377,6 +390,7 @@ public class App {
         return null;
     }
 
+    // CWE-749
     private static void printStudent(Course course) {
         ArrayList<Student> students = course.getStudentList();
         System.out.printf("Students in course %s\n", course.getCourseID());
@@ -387,6 +401,7 @@ public class App {
         }
     }
 
+    // CWE-749
     private static Course findCourse(String id) {
         for (int i = 0; i < courseList.size(); i++) {
             Course curCourse = courseList.get(i);
@@ -404,6 +419,7 @@ public class App {
         return null;
     }
 
+    // CWE-749
     private static void printCourses() {
         if (courseList.size() == 0) {
             System.out.println("There are currently no courses present.");
@@ -419,6 +435,7 @@ public class App {
         }
     }
 
+    // CWE-749
     private static boolean ExitProgram() {
         // CWE-357
         System.out
@@ -439,6 +456,7 @@ public class App {
         return false;
     }
 
+    // CWE-749
     private static int mustGetIntInput(int maxAttempts, String line) {
         int attempt = 0;
         while (attempt < maxAttempts) {
