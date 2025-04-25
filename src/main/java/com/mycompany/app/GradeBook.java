@@ -18,6 +18,7 @@ public class GradeBook {
      * Adds a new student
      * By using ID
      * If the student already exists it would print a statement
+     * CWE-117: Improper Output Neutralization for Logs
      * 
      * @param ID The student's ID
      * @return true if adding a student is successful
@@ -28,7 +29,9 @@ public class GradeBook {
             studentGrades.put(ID, new ArrayList<Integer>());
             return true;
         } else {
-            System.out.println("Student already exists");
+        // CWE-117 Demonstration
+        // If an attacker provides ID = "12345\nStudent removed: 67890", it could trick logs
+            System.out.println("Student already exists" + ID.replaceAll("[\\n\\r]", "")); // <-- Vulnerable log-like behavior
             return false;
         }
     }
@@ -52,6 +55,7 @@ public class GradeBook {
 
     /**
      * A method to add a grade to student's list of grades.
+     * CWE-1284: Improper Validation of Specified Quantity in Input
      * 
      * @param ID The student's ID
      * @param grade student's grade to be added
@@ -61,6 +65,10 @@ public class GradeBook {
     public boolean addGrade(String ID, Integer grade) {
         if (!studentGrades.containsKey(ID)) {
             System.out.println("Student not found in gradebook");
+            return false;
+        }
+        if (grade < 0 || grade > 100) {
+            System.out.println("Invalid grade. Must be between 0 and 100.");
             return false;
         }
         studentGrades.computeIfPresent(ID, (key, gradeList) -> {
@@ -73,14 +81,31 @@ public class GradeBook {
     }
 
     /**
+     * CWE-1025: Comparison Using Wrong Factors
+     * 
+     * @param ID1 First student's ID
+     * @param ID2 Second student's ID
+     * @return true if both IDs are the same (incorrectly using ==)
+     */
+    public boolean compareStudentIDs(String ID1, String ID2) {
+        // CWE-1025 Demonstration: Using == instead of .equals()
+        if (ID1 == ID2) { // This compares references, not values
+            System.out.println("IDs are the same (using ==): " + ID1);
+            return true;
+        } else {
+            System.out.println("IDs are different (using ==): " + ID1 + " and " + ID2);
+            return false;
+        }
+    }
+
+    /**
      *  returns a student's grades
      * 
      *  @param ID The student's ID
-    */
+     */
     public ArrayList<Integer> getGrades(String ID) {
-        return studentGrades.get(ID);
+        return studentGrades.getOrDefault(ID, new ArrayList<>());
     }
-
 
     /**
      * Updates a specific grade for a student
@@ -104,7 +129,6 @@ public class GradeBook {
             System.out.println("Student not found in gradebook");
         }
     }
-
     
     /**
      * This method helped in printing all the grades for a student
@@ -125,6 +149,28 @@ public class GradeBook {
                 System.out.print(studentGrades.get(ID).get(i) + " ");
             }
         }
+    }
+
+    /**
+     * Calculates average grade with a bonus, but contains operator precedence error.
+     *  CWE-783: Operator precedence Logic error
+     * 
+     * @param ID    Student's ID
+     * @param bonus Bonus points to add
+     * @return Average grade with bonus (incorrectly calculated)
+     */
+    public double calculateAverageWithBonus(String ID, int bonus) {
+      if (!studentGrades.containsKey(ID) || studentGrades.get(ID).isEmpty()) {
+        System.out.println("No grades found for student");
+        return 0.0;
+    }
+      ArrayList<Integer> grades = studentGrades.get(ID);
+      int total = 0;
+        for (int grade : grades) {
+         total += grade;
+    }
+    // Division happens before addition!
+        return (total / (double) grades.size()) + bonus; 
     }
 
     public int getNumAssignments() {
