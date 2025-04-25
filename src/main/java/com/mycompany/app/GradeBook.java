@@ -19,19 +19,28 @@ public class GradeBook {
      * By using ID
      * If the student already exists it would print a statement
      * CWE-117: Improper Output Neutralization for Logs
+     * CWE-179: Incorrect Behavior Order: Early Validation
      * 
      * @param ID The student's ID
      * @return true if adding a student is successful
      * @return false if the student already exists
      */
     public boolean addStudent(String ID) {
+         // Early validation: Check if ID is not empty or matches a certain pattern
+        if (ID == null || ID.trim().isEmpty()) {
+          System.out.println("Invalid student ID: ID cannot be empty.");
+          return false;
+       }
+         // This is where we would normally canonicalize or clean the input
+         // let's say we just trim it
+         ID = ID.trim();
+         // Now I have checked if the student already exists
         if (!studentGrades.containsKey(ID)) {
             studentGrades.put(ID, new ArrayList<Integer>());
             return true;
         } else {
             // CWE-117 Demonstration
-            // If an attacker provides ID = "12345\nStudent removed: 67890", it could trick
-            // logs
+            // If an attacker provides ID = "12345\nStudent removed: 67890", it could trick logs
             System.out.println("Student already exists" + ID.replaceAll("[\\n\\r]", "")); // <-- Vulnerable log-like
                                                                                           // behavior
             return false;
@@ -124,7 +133,6 @@ public class GradeBook {
             ArrayList<Integer> grades = studentGrades.get(ID);
             if (index >= 0 && index < grades.size()) {
                 grades.set(index, newGrade);
-                studentGrades.put(ID, grades);
             } else {
                 System.out.println("Invalid index for grades list");
             }
@@ -177,6 +185,11 @@ public class GradeBook {
         return (total / (double) grades.size()) + bonus;
     }
 
+    /**
+      *  Gets the number of Assignments
+      * 
+      *  @return returns the total number of assignments
+      */
     public int getNumAssignments() {
         return numAssignments;
     }
