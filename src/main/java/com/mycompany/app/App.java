@@ -383,6 +383,7 @@ public class App {
         System.out.println("1. Print courses.");
         System.out.println("2. Add student");
         System.out.println("0. Go to previous menu.");
+        System.out.print("Enter selection: ");
         int menuSelection = in.nextInt();
         in.nextLine();
 
@@ -391,7 +392,7 @@ public class App {
                 PrintCourses();
                 break;
             case 2:
-                System.out.println("Enter course ID of which you want to add a student to: ");
+                System.out.print("Enter course ID of which you want to add a student to: ");
                 String courseId = in.nextLine();
                 Course courseToEdit = findCourse(courseId);
                 if (courseToEdit == null) {
@@ -409,7 +410,7 @@ public class App {
                     return;
                 }
                 courseToEdit.addStudent(new Student(fName, lName, stuId));
-                System.out.printf("Added %s, %s to student list", lName, fName);
+                System.out.printf("Added %s, %s to student list\n", lName, fName);
                 break;
 
             default:
@@ -474,7 +475,7 @@ public class App {
 
     private static void printStudent(Course course) {
         ArrayList<Student> students = course.getStudentList();
-        System.out.printf("Students in course %s", course.getCourseID());
+        System.out.printf("Students in course %s\n", course.getCourseID());
         for (int i = 0; i < students.size(); i++) {
             Student stu = students.get(i);
             System.out.printf("First name: %s, Last name: %s, ID: %s", stu.getFirstName(), stu.getLastName(),
