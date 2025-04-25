@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public class GradeBook {
-    //I have tried storing each students grades and ID's with HashMap.
+    // I have tried storing each students grades and ID's with HashMap.
     private HashMap<String, ArrayList<Integer>> studentGrades;
     private int numAssignments;
 
-    //A Constructor for the GradeBook class.
+    // A Constructor for the GradeBook class.
     public GradeBook() {
         studentGrades = new HashMap<>();
     }
@@ -29,9 +29,11 @@ public class GradeBook {
             studentGrades.put(ID, new ArrayList<Integer>());
             return true;
         } else {
-        // CWE-117 Demonstration
-        // If an attacker provides ID = "12345\nStudent removed: 67890", it could trick logs
-            System.out.println("Student already exists" + ID.replaceAll("[\\n\\r]", "")); // <-- Vulnerable log-like behavior
+            // CWE-117 Demonstration
+            // If an attacker provides ID = "12345\nStudent removed: 67890", it could trick
+            // logs
+            System.out.println("Student already exists" + ID.replaceAll("[\\n\\r]", "")); // <-- Vulnerable log-like
+                                                                                          // behavior
             return false;
         }
     }
@@ -57,7 +59,7 @@ public class GradeBook {
      * A method to add a grade to student's list of grades.
      * CWE-1284: Improper Validation of Specified Quantity in Input
      * 
-     * @param ID The student's ID
+     * @param ID    The student's ID
      * @param grade student's grade to be added
      * @return true if the grade was added
      * @return false if the student is not found
@@ -99,9 +101,9 @@ public class GradeBook {
     }
 
     /**
-     *  returns a student's grades
+     * returns a student's grades
      * 
-     *  @param ID The student's ID
+     * @param ID The student's ID
      */
     public ArrayList<Integer> getGrades(String ID) {
         return studentGrades.getOrDefault(ID, new ArrayList<>());
@@ -110,10 +112,11 @@ public class GradeBook {
     /**
      * Updates a specific grade for a student
      * First I have checked if the student exists
-     * Then checked if the index is valid, If it is valid, Updates the grade in the list.
+     * Then checked if the index is valid, If it is valid, Updates the grade in the
+     * list.
      * 
-     * @param ID The student's ID
-     * @param index To update the index of the grade
+     * @param ID      The student's ID
+     * @param index   To update the index of the grade
      * @param neGrade To replace old grade with a new grade
      */
     public void updateGrade(String ID, int index, int newGrade) {
@@ -121,7 +124,7 @@ public class GradeBook {
             ArrayList<Integer> grades = studentGrades.get(ID);
             if (index >= 0 && index < grades.size()) {
                 grades.set(index, newGrade);
-                studentGrades.put(ID, grades);  
+                studentGrades.put(ID, grades);
             } else {
                 System.out.println("Invalid index for grades list");
             }
@@ -129,52 +132,52 @@ public class GradeBook {
             System.out.println("Student not found in gradebook");
         }
     }
-    
+
     /**
      * This method helped in printing all the grades for a student
      * First I have checked if the gradebook is empty
      * Then checked if the student exists
-     * After passing both the checks I made it loop through the grade list and print the grades.
+     * After passing both the checks I made it loop through the grade list and print
+     * the grades.
      * 
      * @param ID The student's ID
      */
     public void printGradebook(String ID) {
         if (studentGrades.isEmpty()) {
             System.out.println("The gradebook is empty.");
-        } else if(!studentGrades.containsKey(ID)) {
+        } else if (!studentGrades.containsKey(ID)) {
             System.out.println("Student not found in gradebook");
-        }
-        else {
-            for(int i=0; i<studentGrades.get(ID).size(); i++) {
+        } else {
+            for (int i = 0; i < studentGrades.get(ID).size(); i++) {
                 System.out.print(studentGrades.get(ID).get(i) + " ");
             }
         }
     }
 
     /**
-     * Calculates average grade with a bonus, but contains operator precedence error.
-     *  CWE-783: Operator precedence Logic error
+     * Calculates average grade with a bonus, but contains operator precedence
+     * error.
+     * CWE-783: Operator precedence Logic error
      * 
      * @param ID    Student's ID
      * @param bonus Bonus points to add
      * @return Average grade with bonus (incorrectly calculated)
      */
     public double calculateAverageWithBonus(String ID, int bonus) {
-      if (!studentGrades.containsKey(ID) || studentGrades.get(ID).isEmpty()) {
-        System.out.println("No grades found for student");
-        return 0.0;
-    }
-      ArrayList<Integer> grades = studentGrades.get(ID);
-      int total = 0;
+        if (!studentGrades.containsKey(ID) || studentGrades.get(ID).isEmpty()) {
+            System.out.println("No grades found for student");
+            return 0.0;
+        }
+        ArrayList<Integer> grades = studentGrades.get(ID);
+        int total = 0;
         for (int grade : grades) {
-         total += grade;
-    }
-    // Division happens before addition!
-        return (total / (double) grades.size()) + bonus; 
+            total += grade;
+        }
+        // Division happens before addition!
+        return (total / (double) grades.size()) + bonus;
     }
 
     public int getNumAssignments() {
         return numAssignments;
     }
-
- }
+}
