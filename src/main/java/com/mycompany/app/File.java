@@ -28,10 +28,12 @@ public class File {
                 int numOfStudents = Integer.parseInt(line);
                 int numOfAssignments = Integer.parseInt(line);
                 String arr[] = line.split(" ");
-                 courseName = arr[0];
-                 courseID = arr[1];
-                String teacherFirstName = arr[2];
-                String teacherLastName = arr[3];
+                 courseID = arr[0];
+                 courseName = arr[1];
+                 String arraryForTeacher[] = line.split(" ");
+                 String garbage = arraryForTeacher[0];
+                 String teacherFirstName = arraryForTeacher[1];
+                 String teacherLastName = arraryForTeacher[2];
                 //Create a new teacher object
                  teacher = new Teacher(teacherFirstName, teacherLastName);
                 //Student
